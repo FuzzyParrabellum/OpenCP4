@@ -77,7 +77,7 @@ def take_option(option=False):
     elif option == "Player_menu":
         sh_pl.show_player()
         player_menu_dict = {1:"Create_player", 2:"Show_ranks", \
-3:"Actualize_rank", 4:"Menu", 5:"SaveAndLoad", 6:"Quit"}
+3:"Menu", 4:"SaveAndLoad", 5:"Quit"}
         new_option = input()
         if new_option not in ["1","2","3","4","5","6"]:
             print("Veuillez uniquement entrer une des options proposées")
@@ -87,8 +87,9 @@ def take_option(option=False):
             path = player_menu_dict[new_option]
             return ["Player", path]
     elif option == "Show_ranks_choices":
+        sh_pl.show_ranks()
         # possibilité de rajouter un défilement des joueurs
-        ranks_menu_dict = {1:"See_player_info", 2:"Player"}
+        ranks_menu_dict = {1:"See_player_info", 2:"Actualize_rank", 3:"Player"}
         new_option = input()
         if new_option not in ["1","2"]:
             print("Veuillez uniquement entrer une des options proposées")
@@ -178,26 +179,40 @@ player_list[3])
             for player in md.Player.PLAYERS:
                 print("\n{} {} | né(e) le {} | Sexe: {} | Classement: {}\n".format\
 (player.first_name,player.last_name, player.birthdate, player.sex, player.ranking))
-            sh_pl.show_ranks()
             return "Show_ranks_choices"
 
         if response[1] == "See_player_info":
-            player_first_name = input('Entrez le nom de famille du joueur\n')
-            player_last_name = input('Entrez le prénom du joueur\n')
+            player_first_name = input('Entrez le prénom joueur\n')
+            player_last_name = input('Entrez le nom de famille du joueur\n')
             for player in md.Player.PLAYERS:
                 if player_first_name == player.first_name and \
                 player_last_name == player.last_name:
                     print("{}--{}--{}--{}--{}\n\n".format(player.first_name, \
 player.last_name, player.birthdate, player.sex, player.ranking))
                     return "Show_ranks_choices"
-                else:
-                    print("\nCe joueur n'est pas enregistré \n")
-                    return "Show_ranks_choices"
+                print("\nCe joueur n'est pas enregistré \n")
+                return "Show_ranks_choices"
             
         if response[1] == "Actualize_rank":
-            pass
+            player_first_name = input('Entrez le prénom joueur\n')
+            player_last_name = input('Entrez le nom de famille du joueur\n')
+            for player in md.Player.PLAYERS:
+                if player_first_name == player.first_name and \
+                player_last_name == player.last_name:
+                    nb_players = len(md.Player.PLAYERS)
+                    new_rank = input('Quel serait son nouveau classement sur \
+{} joueurs ?'.format(nb_players))
+                    while new_rank not in range(1, nb_players + 1):
+                        print('Veuillez entrer un nouveau classement valide svp')
+                        new_rank = input('Quel serait son nouveau classement sur \
+{} joueurs ?'.format(nb_players))
+                    player.ranking = new_rank
+                    return "Show_ranks_choices"
+            print("\nCe joueur n'est pas enregistré \n")
+            return "Show_ranks_choices"
+
         if response[1] == "SaveAndLoad":
-            pass
+            return "SaveAndLoad_menu"
         if response[1] == "Menu":
             return "Menu"
         else:

@@ -134,10 +134,9 @@ souhaitez-vous effectuer?")
 sur ENTRÉE.\n")
         print("Option '1' = Créer un joueur")
         print("Option '2' = Afficher le classement des joueurs")
-        print("Option '3' = Mettre à jour le classement")
-        print("Option '4' = Revenir au menu")
-        print("Option '5' = Aller à la page de sauvegarde/chargement")
-        print("Option '6' = Quitter le programme")
+        print("Option '3' = Revenir au menu")
+        print("Option '4' = Aller à la page de sauvegarde/chargement")
+        print("Option '5' = Quitter le programme")
         print("\nEntrez votre commande ci-dessous...")
     
     @classmethod
@@ -168,7 +167,8 @@ restent modifiables en choisissant l'option 'Modifier les informations du joueur
     def show_ranks(cls):
         print("Que désirez-vous faire ensuite?")
         print("Option '1' : Voir les informations d'un joueur en particulier")
-        print("Option '2' : Revenir au menu")
+        print("Option '2' = Mettre à jour le classement d'un joueur")
+        print("Option '3' : Revenir au menu")
 
 
 

@@ -4,7 +4,7 @@ import os
 import json
 
 import model
-import views
+from views import Navigation as nav
 # OBJECTIF PSEUDO-CODE
 
 # Voir comment créer tout avec le MVC en tête et PEP8 / PEP20
@@ -14,20 +14,34 @@ import views
 """ importer les autres modules nécessaires """
 
 # mettre cette fonction et l'améliorer dans le fichier Vues.py
-def print_menu_options():
-    titre_page = "MENU"
-    print("Bienvenue sur la page de {title}".format(title=titre_page))
-    print("Quelle action souhaitez vous effectuer?")
+# def print_menu_options():
+#     titre_page = "MENU"
+#     print("Bienvenue sur la page de {title}".format(title=titre_page))
+#     print("Quelle action souhaitez vous effectuer?")
 
 """fonction permettant de récupérer les arguments passés dans le programme via l'invite de commande
-Si il est passé ce mot-clé, avec possiblement cet argument, alors ...
+Si il est passé ce mot-clé, avec possiblement cet argu2ment, alors ...
 Sinon renvoyer un message d'erreur et inviter à réessayer
 """
 
 def main():
-    views.ShowTournament.show_tournament()
-    response = input()
+    response = nav.navigate()
     print(f"\n\nVotre réponse est: {response}")
+    while True:
+        new_response = nav.navigate(response)
+        if new_response[0] == "Tournament":
+            pass
+        # penser à mettre le choix d'affichage du classement
+        if new_response[0] == None:
+            pass
+        if new_response[0] == "Player":
+            pass
+        if new_response[0] == "SaveAndLoad":
+            pass
+        else:
+            print("Un choix non prévu a été effectué")
+            break
+        
 
 if __name__ == "__main__":
     main()

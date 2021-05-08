@@ -15,17 +15,17 @@ class Navigation:
         elif response == "1" or response == 1:
             ShowTournament.show_tournament()
             response = input()
-            return ["Tournament",response]
+            return ["Menu", "Tournament",response]
         elif response == "2" or response == 2:
             ShowPlayer.show_player()
             response = input()
-            return ["Player",response]
+            return ["Menu", "Player",response]
         elif response == "3" or response == 3:
             pass
         elif response == "4" or response == 4:
             SaveAndLoad.show_save_and_load()
             response = input()
-            return ["SaveAndLoad",response]
+            return ["Menu", "SaveAndLoad",response]
         elif response == "5" or response == 5:
             quit()
         else:
@@ -84,7 +84,7 @@ sur ENTRÉE.\n")
     @classmethod
     def show_create_tournament(cls):
         print("Entrez les informations de votre nouveau tournoi")
-        Tournament_name = input("Quel est le nom de ce nouveau tournoi?")
+        Tournament_Name = input("Quel est le nom de ce nouveau tournoi?")
         Tournament_Date = input("Quelle est la date de ce nouveau tournoi?")
         # Si un tournoi porte déjà la même nom à la même date, message d'erreur
         Tournament_Location = input("Où se déroule ce nouveau tournoi?")
@@ -98,6 +98,14 @@ sur ENTRÉE.\n")
         Tournament_player8 = input("Quel est le nom du 8e joueur?")
         Time_Preference = input("'Bullet', 'Blitz' ou 'Coup rapide'?")
         Description = input("Comment décrire ce tournoi de manière brève?")
+        return [Tournament_Name, Tournament_Date, Tournament_Location, \
+            Tournament_Player1, Tournament_Player2, Tournament_Player3, \
+            Tournament_Player4, Tournament_Player5, Tournament_Player6, \
+            Tournament_Player7, Tournament_Player8, Time_Preference, \
+            Description]
+
+    @classmethod
+    def show_create_matches(cls): 
         print("Les informations de votre nouveau tournoi ont été enregistrées, elles \
 restent modifiables en choisissant l'option 'Modifier les informations de ce tournoi'")
         print("Les paires de joueurs crées pour ce round sont {1}, {2}, {3}, {4}\
@@ -112,13 +120,13 @@ restent modifiables en choisissant l'option 'Modifier les informations de ce tou
         rounds = []
         winner = False
         i = 1
-        def match_result():
+        for match in range(4): 
             #adapter ce qu'il y en-dessous en fonction et voir sous quel format les rounds doivent être enregistrés
-            match1 = input("Rentrez maintenant le résultat du match n°1: ")
+            match = input("Rentrez maintenant le résultat du match n°1: ")
             while not winner:
                 result = input("Rentrez maintenant le résultat du tour n°{}".format(i))
                 i++
-                round.append(result)
+                rounds.append(result)
                 if result == "checkmate" :
                     winner = True
              
@@ -168,7 +176,7 @@ sur ENTRÉE.\n")
         print("\nEntrez votre commande ci-dessous...")
 
 
-class SaveAndLoad :
+class ShowSaveAndLoad :
 
     def __init__(self):
         pass

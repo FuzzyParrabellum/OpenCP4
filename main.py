@@ -5,6 +5,10 @@ import json
 
 import model
 from views import Navigation as nav
+from views import ShowPlayer as sh_pl
+from views import ShowTournament as sh_to
+from views import ShowSaveAndLoad as sh_sa
+
 # OBJECTIF PSEUDO-CODE
 
 # Voir comment créer tout avec le MVC en tête et PEP8 / PEP20
@@ -26,21 +30,21 @@ Sinon renvoyer un message d'erreur et inviter à réessayer
 
 def main():
     response = nav.navigate()
-    print(f"\n\nVotre réponse est: {response}")
-    while True:
-        new_response = nav.navigate(response)
-        if new_response[0] == "Tournament":
-            pass
+    new_response = nav.navigate(response)
+    while True: 
+        if new_response[0] == "Menu" :
+            if new_response[1] == "Tournament":
+                
         # penser à mettre le choix d'affichage du classement
-        if new_response[0] == None:
-            pass
-        if new_response[0] == "Player":
-            pass
-        if new_response[0] == "SaveAndLoad":
-            pass
-        else:
-            print("Un choix non prévu a été effectué")
-            break
+            if new_response[1] == None:
+                pass
+            if new_response[1] == "Player":
+                pass
+            if new_response[1] == "SaveAndLoad":
+                pass
+            else:
+                print("Un choix non prévu a été effectué")
+                break
         
 
 if __name__ == "__main__":

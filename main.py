@@ -4,7 +4,7 @@ import os
 import json
 
 import model
-from views import Navigation as nav
+from views import ShowMenu as sh_me
 from views import ShowPlayer as sh_pl
 from views import ShowTournament as sh_to
 from views import ShowSaveAndLoad as sh_sa
@@ -27,15 +27,35 @@ from views import ShowSaveAndLoad as sh_sa
 Si il est passé ce mot-clé, avec possiblement cet argu2ment, alors ...
 Sinon renvoyer un message d'erreur et inviter à réessayer
 """
+def take_option(option=False):
+        if not response:
+            sh_me.show_menu()
+            option = input()
+            if option not in [12345] or option not in "12345":
+                print("Veuillez uniquement entrer une des options proposées")
+                take_option()
+            else :
+                return ["Menu", response]
 
-def main():
-    response = nav.navigate()
-    new_response = nav.navigate(response)
-    while True: 
+            
+
+            
+        else :
+            pass
+            
+                # else:
+                #     print("Veuillez uniquement entrer une des options proposées")
+                #     path = response[0]
+                #     new_option = input()
+                #     take_option([path, new_option])
+            # else :
+            #     raise Exception('!!! No path nor option number provided !!!')
+ 
+ def choose_path(response):
+    if response[0] and response[1]:
         if new_response[0] == "Menu" :
             if new_response[1] == "Tournament":
-                
-        # penser à mettre le choix d'affichage du classement
+                chosen_option = sh_to.show_tournament()
             if new_response[1] == None:
                 pass
             if new_response[1] == "Player":
@@ -45,6 +65,16 @@ def main():
             else:
                 print("Un choix non prévu a été effectué")
                 break
+    else :
+        raise Exception('!!! No path nor option number provided !!!')
+
+
+def main():
+    first_input = take_option()
+    new_input = take_option(first_input)
+    while True: 
+        new_option = choose_path(new_input)
+        new_input = take_option()
         
 
 if __name__ == "__main__":

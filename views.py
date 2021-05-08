@@ -1,45 +1,8 @@
 #! /usr/bin/env python3
 # coding: utf-8
+ 
 
-class Navigation:
-
-    def __init__(self):
-        pass
-
-    @classmethod
-    def navigate(cls, response=False):
-        if not response:
-            Menu.show_menu()
-            response = input()
-            return response
-        elif response == "1" or response == 1:
-            ShowTournament.show_tournament()
-            response = input()
-            return ["Menu", "Tournament",response]
-        elif response == "2" or response == 2:
-            ShowPlayer.show_player()
-            response = input()
-            return ["Menu", "Player",response]
-        elif response == "3" or response == 3:
-            pass
-        elif response == "4" or response == 4:
-            SaveAndLoad.show_save_and_load()
-            response = input()
-            return ["Menu", "SaveAndLoad",response]
-        elif response == "5" or response == 5:
-            quit()
-        else:
-            print("Veuillez uniquement entrer une des options proposées")
-            cls.navigate()
-    """Possible classe abstraite 
-    Arrive à cette page
-    Demande un input
-    Récupère cet input
-    Effectue une action
-    Recommence
-    """
-
-class Menu:
+class ShowMenu:
     
     def __init__(self):
         pass

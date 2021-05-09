@@ -61,6 +61,8 @@ sur ENTRÉE.\n")
         Tournament_player8 = input("Quel est le nom du 8e joueur?")
         Time_Preference = input("'Bullet', 'Blitz' ou 'Coup rapide'?")
         Description = input("Comment décrire ce tournoi de manière brève?")
+        print("Les informations de votre nouveau tournoi ont été enregistrées, elles \
+restent modifiables en choisissant l'option 'Modifier les informations de ce tournoi'")
         return [Tournament_Name, Tournament_Date, Tournament_Location, \
             Tournament_Player1, Tournament_Player2, Tournament_Player3, \
             Tournament_Player4, Tournament_Player5, Tournament_Player6, \
@@ -69,10 +71,9 @@ sur ENTRÉE.\n")
 
     @classmethod
     def show_create_matches(cls): 
-        print("Les informations de votre nouveau tournoi ont été enregistrées, elles \
-restent modifiables en choisissant l'option 'Modifier les informations de ce tournoi'")
-        print("Les paires de joueurs crées pour ce round sont {1}, {2}, {3}, {4}\
-".format(1=None, 2=None, 3=None, 4=None))
+        print("Les paires de joueurs crées pour ce round sont ", end=" ")
+        print("{1}, {2}, {3}, {4}".format("paire1", "paire2", "paire3", "paire"))
+
         print("\nVos options sont: \n")
         print("Option '1' = Entrer le résultat des matchs")
         print("Option '2' = Modifier les informations de ce tournoi")
@@ -88,7 +89,7 @@ restent modifiables en choisissant l'option 'Modifier les informations de ce tou
             match = input("Rentrez maintenant le résultat du match n°1: ")
             while not winner:
                 result = input("Rentrez maintenant le résultat du tour n°{}".format(i))
-                i++
+                i += 1
                 rounds.append(result)
                 if result == "checkmate" :
                     winner = True
@@ -164,7 +165,9 @@ def show_error_message():
     pass
 
 def show_exit():
-    pass
+    print('Êtes-vous sûr de vouloir quitter le programme?')
+    print('Option "1" : Oui')
+    print('Option "2" : Non')
 
 
 #SaveAndLoad.show_save_and_load()

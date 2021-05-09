@@ -1,14 +1,16 @@
 #! /usr/bin/env python3
 # coding: utf-8
+
 import os
 import json
 
-import model
+import model as md
 from views import ShowMenu as sh_me
 from views import ShowPlayer as sh_pl
 from views import ShowTournament as sh_to
 from views import ShowSaveAndLoad as sh_sa
-
+from views import show_exit 
+from views import show_error_msg
 # OBJECTIF PSEUDO-CODE
 
 # Voir comment créer tout avec le MVC en tête et PEP8 / PEP20
@@ -28,14 +30,57 @@ Si il est passé ce mot-clé, avec possiblement cet argu2ment, alors ...
 Sinon renvoyer un message d'erreur et inviter à réessayer
 """
 def take_option(option=False):
-        if not response:
+        if not option:
             sh_me.show_menu()
-            option = input()
-            if option not in [12345] or option not in "12345":
+            new_option = input()
+            menu_dict = {1:"Tournament", 2:"Player", 4:"SaveAndLoad", 5:"Quit"}
+            if new_option not in ["1","2","3","4","5"]:
                 print("Veuillez uniquement entrer une des options proposées")
                 take_option()
             else :
-                return ["Menu", response]
+                new_option = int(new_option)
+                path = menu_dict[new_option]
+                return ["Menu", path]
+        
+        elif option == "Menu":
+            sh_me.show_menu()
+            new_option = input()
+            menu_dict = {1:"Tournament", 2:"Player", 4:"SaveAndLoad", 5:"Quit"}
+            if new_option not in ["1","2","3","4","5"]:
+                print("Veuillez uniquement entrer une des options proposées")
+                take_option()
+            else :
+                new_option = int(new_option)
+                path = menu_dict[new_option]
+                return ["Menu", path]
+
+        elif option == "Tournament_menu":
+            tournament_menu_dict = {1:"Create_tournament", 2:"Show_tournament_list", \
+3:"Choose_tournament", 4:"Menu", 5:"SaveAndLoad", 6:"Quit"}
+            new_option = input()
+            if new_option not in ["1","2","3","4","5","6"]:
+                print("Veuillez uniquement entrer une des options proposées")
+                take_option()
+            else:
+                new_option = int(new_option)
+                path = tournament_menu_dict[new_option]
+                return ["Tournament_menu", path]
+        elif option == "Create_matches":
+            create_tournament_dict = {1:"Matches_result", 2:"Modify_tournament_info", \
+3:"Back_to_tournament_menu"}
+            if new_option not in ["1","2","3"]:
+                print("Veuillez uniquement entrer une des options proposées")
+                take_option()
+            else:
+                new_option = int(new_option)
+                path = create_tournament_dict[new_option]
+                return ["Tournament_creation1", path]
+
+        elif option == "Player_menu":
+            pass
+
+        elif option == "SaveAndLoad_menu":
+            pass
 
             
 
@@ -51,34 +96,66 @@ def take_option(option=False):
             # else :
             #     raise Exception('!!! No path nor option number provided !!!')
  
- def choose_path(response):
+def go_to_path(response):
     if response[0] and response[1]:
-        if new_response[0] == "Menu" :
-            if new_response[1] == "Tournament":
-                chosen_option = sh_to.show_tournament()
-            if new_response[1] == None:
+        if response[1] == "Quit":
+            # afficher message, sûr de quitter?
+            # Faudrait aussi que vérifie qu'a bien sauvegardé non?
+            views.show_exit()
+            sure = input()
+            if sure not in ["1", "2"]:
+                print("Veuillez uniquement entrer une des options proposées")
+                got_to_path(response)
+            elif sure == "1":
+                quit()
+            elif sure == "2":
+                return response[0]
+
+        if response[0] == "Menu" :
+            if response[1] == "Tournament":
+                sh_to.show_tournament()
+                return "Tournament_menu"
+            if response[1] == None:
                 pass
-            if new_response[1] == "Player":
-                pass
-            if new_response[1] == "SaveAndLoad":
-                pass
+            if response[1] == "Player":
+                sh_pl.show_player()
+                return "Player_menu"
+            if response[1] == "SaveAndLoad":
+                sh_sa.show_save_and_load()
+                return "SaveAndLoad_menu"
             else:
                 print("Un choix non prévu a été effectué")
-                break
+                quit()
+
+        if response[0] == "Tournament":
+            if response[1] == "Create_tournament":
+                Tournament_list_of_values = sh_to.show_create_tournament()
+                return "Create_matches"
+            else:
+                print("Un choix non prévu a été effectué")
+                quit()
+        if response[0] == "Tournament_creation":
+            if response[1] == "":
+                Tournament_list_of_values = sh_to.show_create_tournament()
+                return ""
+            else:
+                print("Un choix non prévu a été effectué")
+                quit()
     else :
         raise Exception('!!! No path nor option number provided !!!')
 
 
 def main():
     first_input = take_option()
-    new_input = take_option(first_input)
+    new_input = go_to_path(first_input)
     while True: 
-        new_option = choose_path(new_input)
-        new_input = take_option()
+        new_option = take_option(new_input)
+        new_input = go_to_path(new_option)
         
 
 if __name__ == "__main__":
     main()
+
 
 """Ce qui se passe quand on lance l'application
 (---La data se charge)?

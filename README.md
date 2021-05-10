@@ -14,3 +14,6 @@ quelle vue l'utilisateur a décidé d'aller.
 
 Ces deux fonctions sont mises dans une boucle while qui fait en sorte que l'une appelle l'autre à l'infini jusqu'à 
 ce que l'utilisateur choisisse une option lui permettant de quitter le programme.
+
+-------------------
+Pour l'instant Data.json et requirements.txt sont vides

@@ -17,24 +17,16 @@ from views import show_error_msg
 
 
 """fonction permettant de récupérer les arguments passés dans le programme via l'invite de commande
-Si il est passé ce mot-clé, avec possiblement cet argu2ment, alors ...
+Si il est passé ce mot-clé, avec possiblement cet argument, alors ...
 Sinon renvoyer un message d'erreur et inviter à réessayer
 """
-
-
-
-
-def generate_pair_of_players(list_of_players):
-    players = [player1, player2, player3, player4, player5, player6, player7, \
-player8]
-    for i in len(list_of_players):
-        players[i] = list_of_players[i-1]
     
 def take_option(option=False):
     if not option:
         sh_me.show_menu()
         new_option = input()
-        menu_dict = {1:"Tournament", 2:"Player", 4:"SaveAndLoad", 5:"Quit"}
+        menu_dict = {1:"Tournament", 2:"Player", 3:"Actualize_rank", 4:"SaveAndLoad",\
+5:"Quit"}
         if new_option not in ["1","2","3","4","5"]:
             print("Veuillez uniquement entrer une des options proposées")
             take_option()
@@ -47,7 +39,8 @@ def take_option(option=False):
     elif option == "Menu":
         sh_me.show_menu()
         new_option = input()
-        menu_dict = {1:"Tournament", 2:"Player", 4:"SaveAndLoad", 5:"Quit", 42:"admin"}
+        menu_dict = {1:"Tournament", 2:"Player", 3:"Actualize_rank", 4:"SaveAndLoad", \
+5:"Quit", 42:"admin"}
         if new_option not in ["1","2","3","4","5", "42"]:
             print("Veuillez uniquement entrer une des options proposées")
             take_option()
@@ -106,7 +99,17 @@ def take_option(option=False):
 
     # Si l'on veut SAUVEGARDER ou CHARGER UNE SAUVEGARDE
     elif option == "SaveAndLoad_menu":
-        pass
+        sh_sa.show_save_and_load()
+        SaveAndLoad_menu_dict = {1:"New_save", 2:"Load_save", 3:"Menu", 4:"Quit"}
+        new_option = input()
+        if new_option not in ["1","2","3","4"]:
+            print("Veuillez uniquement entrer une des options proposées")
+            take_option()
+        else:
+            new_option = int(new_option)
+            path = SaveAndLoad_menu_dict[new_option]
+            return ["SaveAndLoad", path]
+
 
         
 
@@ -122,10 +125,16 @@ def take_option(option=False):
         # else :
         #     raise Exception('!!! No path nor option number provided !!!')
  
+ def generate_pair_of_players(list_of_players):
+    players = [player1, player2, player3, player4, player5, player6, player7, \
+player8]
+    for i in len(list_of_players):
+        players[i] = list_of_players[i-1]
+
 def go_to_path(response):
     if response[0] and response[1]:
         if response[1] == "Quit":
-            # afficher message, sûr de quitter?5
+            # afficher message, sûr de quitter?
             # Faudrait aussi que vérifie qu'a bien sauvegardé non?
             show_exit()
             sure = input()
@@ -198,16 +207,26 @@ player.last_name, player.birthdate, player.sex, player.rank))
                     else:
                         print("\nCe joueur n'est pas enregistré \n")
                         return "Show_ranks_choices"
+                
+            if response[1] == "Actualize_rank":
+                pass
+            if response[1] == "SaveAndLoad":
+                pass
+            if response[1] == "Menu":
+                return "Menu"
             else:
                 print("Un choix non prévu a été effectué en venant de {}, {}".format(response[0], response[1]))
                 quit()
                         
 
 
-        if response[0] == "":
-            if response[1] == "":
-                
+        if response[0] == "SaveAndLoad":
+            if response[1] == "New_save":
                 return ""
+            if response[1] == "Load_save":
+                return ""
+            if response[1] == "Menu":
+                return "Menu"
             else:
                 print("Un choix non prévu a été effectué en venant de {}, {}".format(response[0], response[1]))
                 quit()
@@ -221,19 +240,12 @@ def main():
     while True: 
         print("######################DEBUT DE LA BOUCLE#########################")
         new_option = take_option(new_input)
-        print("NORMALEMENT NEW_OPTION EST PLAYER, SHOW_RANKS : {}".format(new_option))
+        print("NEW_OPTION : {}".format(new_option))
         if new_option[1] == "admin":
             break
         new_input = go_to_path(new_option)
-        print("NORMALEMENT NEW_INPUT EST PLAYER_MENU : {}".format(new_input))
+        print("NEW_INPUT : {}".format(new_input))
         
     
-        
-
 if __name__ == "__main__":
     main()
-
-
-
-
-

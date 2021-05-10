@@ -3,12 +3,17 @@
 
 class Player:
 
-    def __init__(self):
+    NUMBER_OF_PLAYERS = 0
+    PLAYERS = []
+
+    def __init__(self,first_name, last_name, birthdate, sex):
         self.first_name = first_name
         self.last_name = last_name
         self.birthdate = birthdate
-        self.sex = Sex
-        self.ranking = ranking
+        self.sex = sex
+        Player.NUMBER_OF_PLAYERS += 1
+        self.ranking = self.NUMBER_OF_PLAYERS
+        self.PLAYERS.append(self)
 
 class Tournament:
 
@@ -35,3 +40,4 @@ class Round:
         self.name = name
         self.first_timestamp = first_timestamp
         self.last_timestamp = last_timestamp
+

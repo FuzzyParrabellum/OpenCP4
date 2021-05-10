@@ -124,7 +124,7 @@ class ShowPlayer :
         pass
     
     @classmethod
-    def show_player(self):
+    def show_player(cls):
         print("\n\n ")
         print(r"###############JOUEUR&CLASSEMENT###############")
         print("\nBienvenue sur la page de création de joueur quelle action \
@@ -138,6 +138,26 @@ sur ENTRÉE.\n")
         print("Option '5' = Aller à la page de sauvegarde/chargement")
         print("Option '6' = Quitter le programme")
         print("\nEntrez votre commande ci-dessous...")
+    
+    @classmethod
+    def show_create_player(cls):
+        print("Entrez les informations de votre nouveau joueur")
+        first_name = input("Quel est le prénom de ce nouveau joueur?\n")
+        last_name = input("Quel est le nom de famille de ce nouveau joueur?\n")
+        birth = input("Quelle est la date de naissance de ce nouveau joueur?\
+JJ/MM/AAAA\n")
+        sex = input("Quelle est le sexe de ce nouveau joueur? M/F\n")
+        # Si un tournoi porte déjà la même nom à la même date, message d'erreur
+        print("Les informations du nouveau joueur ont été enregistrées, elles \
+restent modifiables en choisissant l'option 'Modifier les informations du joueur'")
+        return [first_name, last_name, birth, sex]
+
+    @classmethod
+    def show_ranks(cls):
+        print("Que désirez-vous faire ensuite?")
+        print("Option '1' : Voir les informations d'un joueur en particulier")
+        print("Option '2' : Revenir au menu")
+
 
 
 class ShowSaveAndLoad :
@@ -161,7 +181,7 @@ une sauvegarde")
         print("\nEntrez votre commande ci-dessous...")
 
 
-def show_error_message():
+def show_error_msg():
     pass
 
 def show_exit():

@@ -11,9 +11,6 @@ from views import ShowTournament as sh_to
 from views import ShowSaveAndLoad as sh_sa
 from views import show_exit 
 from views import show_error_msg
-# OBJECTIF PSEUDO-CODE
-
-# Voir comment créer tout avec le MVC en tête et PEP8 / PEP20
 
 
 """fonction permettant de récupérer les arguments passés dans le programme via l'invite de commande
@@ -125,120 +122,167 @@ def take_option(option=False):
         # else :
         #     raise Exception('!!! No path nor option number provided !!!')
  
- def generate_pair_of_players(list_of_players):
+#########################################
+#########################################
+
+def generate_pair_of_players(list_of_players):
     players = [player1, player2, player3, player4, player5, player6, player7, \
 player8]
     for i in len(list_of_players):
         players[i] = list_of_players[i-1]
 
-def go_to_path(response):
-    if response[0] and response[1]:
-        if response[1] == "Quit":
-            # afficher message, sûr de quitter?
-            # Faudrait aussi que vérifie qu'a bien sauvegardé non?
-            show_exit()
-            sure = input()
-            if sure not in ["1", "2"]:
-                print("Veuillez uniquement entrer une des options proposées")
-                got_to_path(response)
-            elif sure == "1":
-                quit()
-            elif sure == "2":
-                return response[0]
+#########################################
+#########################################
+    
+class FromMenu():
 
-        # QUAND ON VIENT DU MENU
-        if response[0] == "Menu" :
-            if response[1] == "Tournament":
-                sh_to.show_tournament()
-                return "Tournament_menu"
+    def __init__(self):
+        pass
 
-            if response[1] == None:
-                pass
+    @classmethod
+    def take_response(self, response):
+        self.response = response
+        if response[1] == "Tournament":
+            sh_to.show_tournament()
+            return "Tournament_menu"
+        if response[1] == None:
+            pass
+        if response[1] == "Player":
+            sh_pl.show_player()
+            return "Player_menu"
+        if response[1] == "SaveAndLoad":
+            sh_sa.show_save_and_load()
+            return "SaveAndLoad_menu"  
+        else:
+            print("Un choix non prévu a été effectué en venant de {}"\
+.format(response[0], response[1]))
+            quit()
 
-            if response[1] == "Player":
-                sh_pl.show_player()
-                return "Player_menu"
 
-            if response[1] == "SaveAndLoad":
-                sh_sa.show_save_and_load()
-                return "SaveAndLoad_menu"
-                
-            else:
-                print("Un choix non prévu a été effectué en venant de {}".format(response[0], response[1]))
-                quit()
+class FromPlayer():
 
-        #QUAND ON VIENT DE LA CREATION DE TOURNOI
-        if response[0] == "Tournament_menu":
-            if response[1] == "Create_tournament":
-                Tournament_list_of_values = sh_to.show_create_tournament()
-                return "Create_matches"
-            else:
-                print("Un choix non prévu a été effectué en venant de {}".format(response[0], response[1]))
-                quit()
+    def __init__(self):
+        pass
+
+    @classmethod
+    def take_response(self, response):
+        self.response = response
+        if response[1] == "Create_player":
+            player_list = sh_pl.show_create_player()
+            new_player = md.Player(player_list[0], player_list[1], player_list[2], \
+player_list[3])
+            return "Player_menu"
+
+        if response[1] == "Show_ranks":
+            for player in md.Player.PLAYERS:
+                print("{}--{}--{}--{}--{}".format(player.first_name, player.last_name, \
+player.birthdate, player.sex, player.rank))
+            sh_pl.show_ranks()
+            return "Show_ranks_choices"
+
+        if response[1] == "See_player_info":
+            player_first_name = input('Entrez le nom de famille du joueur\n')
+            player_last_name = input('Entrez le prénom du joueur\n')
+            for player in md.Player.PLAYERS:
+                if player_first_name == player.first_name and \
+                player_last_name == player.last_name:
+                    print("{}--{}--{}--{}--{}\n\n".format(player.first_name, \
+player.last_name, player.birthdate, player.sex, player.rank))
+                    return "Show_ranks_choices"
+                else:
+                    print("\nCe joueur n'est pas enregistré \n")
+                    return "Show_ranks_choices"
+            
+        if response[1] == "Actualize_rank":
+            pass
+        if response[1] == "SaveAndLoad":
+            pass
+        if response[1] == "Menu":
+            return "Menu"
+        else:
+            print("Un choix non prévu a été effectué en venant de {}, {}".\
+format(response[0], response[1]))
+            quit()
+
+
+class FromTournament():
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def take_response(self, response):
+        self.response = response
+        if response[1] == "Create_tournament":
+            Tournament_list_of_values = sh_to.show_create_tournament()
+            return "Create_matches"
+        else:
+            print("Un choix non prévu a été effectué en venant de {}".\
+format(response[0], response[1]))
+            quit()
 
         if response[0] == "Tournament_creation1":
             if response[1] == "Matches_result":
                 Matches_list_of_values = sh_to.show_enter_matches()
                 return ""
             else:
-                print("Un choix non prévu a été effectué en venant de {}".format(response[0], response[1]))
+                print("Un choix non prévu a été effectué en venant de {}".\
+    format(response[0], response[1]))
                 quit()
 
-        #QUAND ON VIENT DE LA CREATION DE JOUEUR
-        if response[0] == "Player":
-            if response[1] == "Create_player":
-                player_list = sh_pl.show_create_player()
-                new_player = md.Player(player_list[0], player_list[1], player_list[2], \
-player_list[3])
-                return "Player_menu"
 
-            if response[1] == "Show_ranks":
-                for player in md.Player.PLAYERS:
-                    print("{}--{}--{}--{}--{}".format(player.first_name, player.last_name, \
-player.birthdate, player.sex, player.rank))
-                sh_pl.show_ranks()
-                return "Show_ranks_choices"
+class FromSaveAndLoad():
 
-            if response[1] == "See_player_info":
-                player_first_name = input('Entrez le nom de famille du joueur\n')
-                player_last_name = input('Entrez le prénom du joueur\n')
-                for player in md.Player.PLAYERS:
-                    if player_first_name == player.first_name and \
-                    player_last_name == player.last_name:
-                        print("{}--{}--{}--{}--{}\n\n".format(player.first_name, \
-player.last_name, player.birthdate, player.sex, player.rank))
-                        return "Show_ranks_choices"
-                    else:
-                        print("\nCe joueur n'est pas enregistré \n")
-                        return "Show_ranks_choices"
-                
-            if response[1] == "Actualize_rank":
-                pass
-            if response[1] == "SaveAndLoad":
-                pass
-            if response[1] == "Menu":
-                return "Menu"
-            else:
-                print("Un choix non prévu a été effectué en venant de {}, {}".format(response[0], response[1]))
-                quit()
-                        
+    def __init__(self):
+        pass
 
-        if response[0] == "SaveAndLoad":
-            if response[1] == "New_save":
-                return ""
+    @classmethod
+    def take_response(self, response):
+        self.response = response
+        if response[1] == "New_save":
+            return ""
 
-            if response[1] == "Load_save":
-                return ""
+        if response[1] == "Load_save":
+            return ""
 
-            if response[1] == "Menu":
-                return "Menu"
+        if response[1] == "Menu":
+            return "Menu"
 
-            else:
-                print("Un choix non prévu a été effectué en venant de {}, {}".format(response[0], response[1]))
-                quit()
-    else :
-        raise Exception('!!! No path nor option number provided !!!')
+        else:
+            print("Un choix non prévu a été effectué en venant de {}, {}".\
+format(response[0], response[1]))
+            quit()
 
+def go_to_path(response):
+    if response[0] and response[1]:
+            if response[1] == "Quit":
+                # afficher message, sûr de quitter?
+                # Faudrait aussi que vérifie qu'a bien sauvegardé non?
+                show_exit()
+                sure = input()
+                if sure not in ["1", "2"]:
+                    print("Veuillez uniquement entrer une des options proposées")
+                    go_to_path(response)
+                elif sure == "1":
+                    quit()
+                elif sure == "2":
+                    return response[0]
+            if response[0] == "Menu" :
+                return FromMenu.take_response(response)
+            if response[0] == "Tournament_menu":
+                return FromTournament.take_response(response)
+            if response[0] == "Player":
+                return FromPlayer.take_response(response)
+            if response[0] == "SaveAndLoad":
+                return FromSaveAndLoad.take_response(response)
+            
+    else:
+        print('!!! No path nor option number provided !!!')
+        quit()
+    
+
+#########################################
+#########################################
 
 def main():
     first_input = take_option()
@@ -255,3 +299,112 @@ def main():
     
 if __name__ == "__main__":
     main()
+
+
+# def go_to_path(response):
+    # if response[0] and response[1]:
+        # if response[1] == "Quit":
+        #     # afficher message, sûr de quitter?
+        #     # Faudrait aussi que vérifie qu'a bien sauvegardé non?
+        #     show_exit()
+        #     sure = input()
+        #     if sure not in ["1", "2"]:
+        #         print("Veuillez uniquement entrer une des options proposées")
+        #         go_to_path(response)
+        #     elif sure == "1":
+        #         quit()
+        #     elif sure == "2":
+        #         return response[0]
+
+        # QUAND ON VIENT DU MENU
+        # if response[0] == "Menu" :
+        #     if response[1] == "Tournament":
+        #         sh_to.show_tournament()
+        #         return "Tournament_menu"
+
+        #     if response[1] == None:
+        #         pass
+
+        #     if response[1] == "Player":
+        #         sh_pl.show_player()
+        #         return "Player_menu"
+
+        #     if response[1] == "SaveAndLoad":
+        #         sh_sa.show_save_and_load()
+        #         return "SaveAndLoad_menu"
+                
+        #     else:
+        #         print("Un choix non prévu a été effectué en venant de {}".format(response[0], response[1]))
+        #         quit()
+
+        #QUAND ON VIENT DE LA CREATION DE TOURNOI
+        # if response[0] == "Tournament_menu":
+        #     if response[1] == "Create_tournament":
+        #         Tournament_list_of_values = sh_to.show_create_tournament()
+        #         return "Create_matches"
+        #     else:
+        #         print("Un choix non prévu a été effectué en venant de {}".format(response[0], response[1]))
+        #         quit()
+
+        # if response[0] == "Tournament_creation1":
+        #     if response[1] == "Matches_result":
+        #         Matches_list_of_values = sh_to.show_enter_matches()
+        #         return ""
+        #     else:
+        #         print("Un choix non prévu a été effectué en venant de {}".format(response[0], response[1]))
+        #         quit()
+
+        #QUAND ON VIENT DE LA CREATION DE JOUEUR
+#         if response[0] == "Player":
+#             if response[1] == "Create_player":
+#                 player_list = sh_pl.show_create_player()
+#                 new_player = md.Player(player_list[0], player_list[1], player_list[2], \
+# player_list[3])
+#                 return "Player_menu"
+
+#             if response[1] == "Show_ranks":
+#                 for player in md.Player.PLAYERS:
+#                     print("{}--{}--{}--{}--{}".format(player.first_name, player.last_name, \
+# player.birthdate, player.sex, player.rank))
+#                 sh_pl.show_ranks()
+#                 return "Show_ranks_choices"
+
+#             if response[1] == "See_player_info":
+#                 player_first_name = input('Entrez le nom de famille du joueur\n')
+#                 player_last_name = input('Entrez le prénom du joueur\n')
+#                 for player in md.Player.PLAYERS:
+#                     if player_first_name == player.first_name and \
+#                     player_last_name == player.last_name:
+#                         print("{}--{}--{}--{}--{}\n\n".format(player.first_name, \
+# player.last_name, player.birthdate, player.sex, player.rank))
+#                         return "Show_ranks_choices"
+#                     else:
+#                         print("\nCe joueur n'est pas enregistré \n")
+#                         return "Show_ranks_choices"
+                
+#             if response[1] == "Actualize_rank":
+#                 pass
+#             if response[1] == "SaveAndLoad":
+#                 pass
+#             if response[1] == "Menu":
+#                 return "Menu"
+#             else:
+#                 print("Un choix non prévu a été effectué en venant de {}, {}".format(response[0], response[1]))
+#                 quit()
+                        
+
+        # if response[0] == "SaveAndLoad":
+        #     if response[1] == "New_save":
+        #         return ""
+
+        #     if response[1] == "Load_save":
+        #         return ""
+
+        #     if response[1] == "Menu":
+        #         return "Menu"
+
+        #     else:
+        #         print("Un choix non prévu a été effectué en venant de {}, {}".format(response[0], response[1]))
+        #         quit()
+    # else :
+    #     raise Exception('!!! No path nor option number provided !!!')

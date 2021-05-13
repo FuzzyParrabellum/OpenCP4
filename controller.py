@@ -48,6 +48,7 @@ def take_option(option=False):
 
     #Si l'on veut aller dans la CREATION DE TOURNOI
     elif option == "Tournament_menu":
+        sh_to.show_tournament()
         tournament_menu_dict = {1:"Create_tournament", 2:"Show_tournament_list", \
 3:"Choose_tournament", 4:"Menu", 5:"SaveAndLoad", 6:"Quit"}
         new_option = input()
@@ -57,17 +58,20 @@ def take_option(option=False):
         else:
             new_option = int(new_option)
             path = tournament_menu_dict[new_option]
-            return ["Tournament_menu", path]
+            return ["Tournament", path]
+
     elif option == "Create_matches":
+        sh_to.show_create_matches()
         create_tournament_dict = {1:"Matches_result", 2:"Modify_tournament_info", \
 3:"Back_to_tournament_menu"}
+        new_option = input()
         if new_option not in ["1","2","3"]:
             print("Veuillez uniquement entrer une des options proposées")
             take_option()
         else:
             new_option = int(new_option)
             path = create_tournament_dict[new_option]
-            return ["Tournament_creation1", path]
+            return ["Tournament", path]
 
     # Si on veut aller dans la CREATION DE JOUEUR
     elif option == "Player_menu":
@@ -134,7 +138,7 @@ player8]
 #########################################
 #########################################
     
-class FromMenu():
+class FromMenu:
 
     def __init__(self):
         pass
@@ -143,15 +147,12 @@ class FromMenu():
     def take_response(self, response):
         self.response = response
         if response[1] == "Tournament":
-            sh_to.show_tournament()
             return "Tournament_menu"
         if response[1] == None:
             pass
         if response[1] == "Player":
-            sh_pl.show_player()
             return "Player_menu"
         if response[1] == "SaveAndLoad":
-            sh_sa.show_save_and_load()
             return "SaveAndLoad_menu"  
         else:
             print("Un choix non prévu a été effectué en venant de {}"\
@@ -159,7 +160,7 @@ class FromMenu():
             quit()
 
 
-class FromPlayer():
+class FromPlayer:
 
     def __init__(self):
         pass
@@ -175,8 +176,8 @@ player_list[3])
 
         if response[1] == "Show_ranks":
             for player in md.Player.PLAYERS:
-                print("{}--{}--{}--{}--{}".format(player.first_name, player.last_name, \
-player.birthdate, player.sex, player.rank))
+                print("\n{} {} | né(e) le {} | Sexe: {} | Classement: {}\n".format\
+(player.first_name,player.last_name, player.birthdate, player.sex, player.ranking))
             sh_pl.show_ranks()
             return "Show_ranks_choices"
 
@@ -187,7 +188,7 @@ player.birthdate, player.sex, player.rank))
                 if player_first_name == player.first_name and \
                 player_last_name == player.last_name:
                     print("{}--{}--{}--{}--{}\n\n".format(player.first_name, \
-player.last_name, player.birthdate, player.sex, player.rank))
+player.last_name, player.birthdate, player.sex, player.ranking))
                     return "Show_ranks_choices"
                 else:
                     print("\nCe joueur n'est pas enregistré \n")
@@ -205,10 +206,11 @@ format(response[0], response[1]))
             quit()
 
 
-class FromTournament():
+class FromTournament:
 
     def __init__(self):
         pass
+        
 
     @classmethod
     def take_response(self, response):
@@ -216,22 +218,24 @@ class FromTournament():
         if response[1] == "Create_tournament":
             Tournament_list_of_values = sh_to.show_create_tournament()
             return "Create_matches"
+
+        if response[1] == "Matches_result":
+            Matches_list_of_values = sh_to.show_enter_matches()
+            return ""
+
+        if response[1] == "Modify_tournament_info":
+            return ""
+
+        if response[1] == "Back_to_tournament_menu":
+            return ""
+
         else:
             print("Un choix non prévu a été effectué en venant de {}".\
 format(response[0], response[1]))
             quit()
 
-        if response[0] == "Tournament_creation1":
-            if response[1] == "Matches_result":
-                Matches_list_of_values = sh_to.show_enter_matches()
-                return ""
-            else:
-                print("Un choix non prévu a été effectué en venant de {}".\
-    format(response[0], response[1]))
-                quit()
 
-
-class FromSaveAndLoad():
+class FromSaveAndLoad:
 
     def __init__(self):
         pass
@@ -253,6 +257,7 @@ class FromSaveAndLoad():
 format(response[0], response[1]))
             quit()
 
+
 def go_to_path(response):
     if response[0] and response[1]:
             if response[1] == "Quit":
@@ -269,7 +274,7 @@ def go_to_path(response):
                     return response[0]
             if response[0] == "Menu" :
                 return FromMenu.take_response(response)
-            if response[0] == "Tournament_menu":
+            if response[0] == "Tournament":
                 return FromTournament.take_response(response)
             if response[0] == "Player":
                 return FromPlayer.take_response(response)

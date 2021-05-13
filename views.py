@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # coding: utf-8
- 
+import re
+from sre_constants import error
 
 class ShowMenu:
     
@@ -52,22 +53,22 @@ sur ENTRÉE.\n")
         # Si un tournoi porte déjà la même nom à la même date, message d'erreur
         Tournament_Location = input("Où se déroule ce nouveau tournoi?")
         Tournament_Player1 = input("Quel est le nom du 1er joueur?")
-        Tournament_player2 = input("Quel est le nom du 2e joueur?")
-        Tournament_player3 = input("Quel est le nom du 3e joueur?")
-        Tournament_player4 = input("Quel est le nom du 4e joueur?")
+        Tournament_Player2 = input("Quel est le nom du 2e joueur?")
+        Tournament_Player3 = input("Quel est le nom du 3e joueur?")
+        Tournament_Player4 = input("Quel est le nom du 4e joueur?")
         Tournament_Player5 = input("Quel est le nom du 5e joueur?")
-        Tournament_player6 = input("Quel est le nom du 6e joueur?")
-        Tournament_player7 = input("Quel est le nom du 7e joueur?")
-        Tournament_player8 = input("Quel est le nom du 8e joueur?")
+        Tournament_Player6 = input("Quel est le nom du 6e joueur?")
+        Tournament_Player7 = input("Quel est le nom du 7e joueur?")
+        Tournament_Player8 = input("Quel est le nom du 8e joueur?")
         Time_Preference = input("'Bullet', 'Blitz' ou 'Coup rapide'?")
         Description = input("Comment décrire ce tournoi de manière brève?")
         print("Les informations de votre nouveau tournoi ont été enregistrées, elles \
 restent modifiables en choisissant l'option 'Modifier les informations de ce tournoi'")
         return [Tournament_Name, Tournament_Date, Tournament_Location, \
-            Tournament_Player1, Tournament_Player2, Tournament_Player3, \
-            Tournament_Player4, Tournament_Player5, Tournament_Player6, \
-            Tournament_Player7, Tournament_Player8, Time_Preference, \
-            Description]
+Tournament_Player1, Tournament_Player2, Tournament_Player3, \
+Tournament_Player4, Tournament_Player5, Tournament_Player6, \
+Tournament_Player7, Tournament_Player8, Time_Preference, \
+Description]
 
     @classmethod
     def show_create_matches(cls): 
@@ -91,9 +92,8 @@ restent modifiables en choisissant l'option 'Modifier les informations de ce tou
                 result = input("Rentrez maintenant le résultat du tour n°{}".format(i))
                 i += 1
                 rounds.append(result)
-                if result == "checkmate" :
-                    winner = True
-             
+                if result == "checkmate":
+                    winner = True     
         sure_match1 = input("Voulez-vous modifier ce résultat ? 'Oui'/'Non'")
         match2 = input("Rentrez maintenant le résultat du match n°2: ")
         sure_match2 = input("Voulez-vous modifier ce résultat ? 'Oui'/'Non'")
@@ -101,6 +101,7 @@ restent modifiables en choisissant l'option 'Modifier les informations de ce tou
         sure_match3 = input("Voulez-vous modifier ce résultat ? 'Oui'/'Non'")
         match4 = input("Rentrez maintenant le résultat du match n°4: ")
         sure_match4 = input("Voulez-vous modifier ce résultat ? 'Oui'/'Non'")
+        return [sure_match1, ]
         
 """     
 
@@ -146,7 +147,18 @@ sur ENTRÉE.\n")
         last_name = input("Quel est le nom de famille de ce nouveau joueur?\n")
         birth = input("Quelle est la date de naissance de ce nouveau joueur?\
 JJ/MM/AAAA\n")
+        foundbirth = re.compile(r"\d\d/\d\d/\d\d\d\d").search(birth)
+        while not foundbirth:
+            print("Veuillez entrer une date au bon format svp")
+            birth = input("Quelle est la date de naissance de ce nouveau joueur?\
+JJ/MM/AAAA\n")
+            foundbirth = re.compile(r"\d\d/\d\d/\d\d\d\d").search(birth)
         sex = input("Quelle est le sexe de ce nouveau joueur? M/F\n")
+        foundsex = re.compile(r"[MF]").search(sex)
+        while not foundsex:
+            print("Veuillez entrer le bon format svp")
+            sex = input("Quelle est le sexe de ce nouveau joueur? M/F\n")
+            foundsex = re.compile(r"[MF]").search(sex)
         # Si un tournoi porte déjà la même nom à la même date, message d'erreur
         print("Les informations du nouveau joueur ont été enregistrées, elles \
 restent modifiables en choisissant l'option 'Modifier les informations du joueur'")

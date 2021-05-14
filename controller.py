@@ -89,9 +89,9 @@ def take_option(option=False):
     elif option == "Show_ranks_choices":
         sh_pl.show_ranks()
         # possibilité de rajouter un défilement des joueurs
-        ranks_menu_dict = {1:"See_player_info", 2:"Actualize_rank", 3:"Player"}
+        ranks_menu_dict = {1:"See_player_info", 2:"Actualize_rank", 3:"Player_Menu"}
         new_option = input()
-        if new_option not in ["1","2"]:
+        if new_option not in ["1","2","3"]:
             print("Veuillez uniquement entrer une des options proposées")
             take_option()
         else:
@@ -210,7 +210,8 @@ player.last_name, player.birthdate, player.sex, player.ranking))
                     return "Show_ranks_choices"
             print("\nCe joueur n'est pas enregistré \n")
             return "Show_ranks_choices"
-
+        if response[1] == "Player_Menu":
+            return "Player_menu"
         if response[1] == "SaveAndLoad":
             return "SaveAndLoad_menu"
         if response[1] == "Menu":

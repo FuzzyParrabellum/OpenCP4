@@ -177,7 +177,7 @@ player_list[3])
 
         if response[1] == "Show_ranks":
             for player in md.Player.PLAYERS:
-                print("\n{} {} | né(e) le {} | Sexe: {} | Classement: {}\n".format\
+                print("\n{} {} | né(e) le {} | Sexe: {} | Classement: {}".format\
 (player.first_name,player.last_name, player.birthdate, player.sex, player.ranking))
             return "Show_ranks_choices"
 
@@ -200,16 +200,26 @@ player.last_name, player.birthdate, player.sex, player.ranking))
                 if player_first_name == player.first_name and \
                 player_last_name == player.last_name:
                     nb_players = len(md.Player.PLAYERS)
-                    new_rank = input('Quel serait son nouveau classement sur \
-{} joueurs ?'.format(nb_players))
-                    while new_rank not in range(1, nb_players + 1):
+                    new_rank = int(input('Quel serait son nouveau classement sur \
+{} joueurs ?\n'.format(nb_players)))
+                    while new_rank > len(range(1, nb_players + 1)) or new_rank < 1:
                         print('Veuillez entrer un nouveau classement valide svp')
                         new_rank = input('Quel serait son nouveau classement sur \
-{} joueurs ?'.format(nb_players))
-                    player.ranking = new_rank
+{} joueurs ?\n'.format(nb_players))
+                    if new_rank == player.ranking :
+                        print("Erreur : le nouveau classement du joueur \
+est le même que l'ancien")
+                        return "Show_ranks_choices"
+                    player.change_rank(new_rank)
+                    print("\n le changement a bien été enregistré\n")
+                    for player in md.Player.PLAYERS:
+                        print("\n{} {} | né(e) le {} | Sexe: {} | Classement: {}".format\
+(player.first_name,player.last_name, player.birthdate, player.sex, player.ranking))
                     return "Show_ranks_choices"
+
             print("\nCe joueur n'est pas enregistré \n")
             return "Show_ranks_choices"
+
         if response[1] == "Player_Menu":
             return "Player_menu"
         if response[1] == "SaveAndLoad":
@@ -306,6 +316,15 @@ def go_to_path(response):
 #########################################
 
 def main():
+    player1 = md.Player("John", "Doe", "12/01/1930", "M")
+    player2 = md.Player("Jane", "Doe", "17/04/1926", "F")
+    player3 = md.Player("Jojo", "Rabbit", "19/04/1928", "M")
+    player4 = md.Player("Joselaine", "Dabit", "20/04/1922", "F")
+    player5 = md.Player("Polo", "LePolo", "11/06/1815", "M")
+    player6 = md.Player("Carabine", "LeCarabin", "16/05/1982", "M")
+    player7 = md.Player("Canelle", "Doublekick", "12/11/1956", "F")
+    player8 = md.Player("Gaelle", "Belle", "12/11/1965", "M")
+
     first_input = take_option()
     new_input = go_to_path(first_input)
     while True: 

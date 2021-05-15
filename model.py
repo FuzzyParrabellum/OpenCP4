@@ -15,6 +15,18 @@ class Player:
         self.ranking = self.NUMBER_OF_PLAYERS
         self.PLAYERS.append(self)
 
+    def change_rank(self, new_rank):
+        old_rank = self.ranking
+        self.new_rank = new_rank
+        for player in self.PLAYERS:
+            if player != self and new_rank > old_rank:
+                if player.ranking <= new_rank and player.ranking > old_rank:
+                    player.ranking -= 1
+            elif player != self and new_rank < old_rank:
+                if player.ranking >= new_rank and player.ranking < old_rank:
+                    player.ranking += 1
+        self.ranking = new_rank
+
 class Tournament:
 
     def __init__(self):

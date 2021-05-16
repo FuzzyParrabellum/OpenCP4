@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # coding: utf-8
 import re
+import model
 from sre_constants import error
 
 class ShowMenu:
@@ -48,27 +49,63 @@ sur ENTRÉE.\n")
     @classmethod
     def show_create_tournament(cls):
         print("Entrez les informations de votre nouveau tournoi")
-        Tournament_Name = input("Quel est le nom de ce nouveau tournoi?")
-        Tournament_Date = input("Quelle est la date de ce nouveau tournoi?")
+        Tournament_Name = input("Quel est le nom de ce nouveau tournoi?\n")
+        Tournament_Date = input("Quelle est la date de ce nouveau tournoi? \
+JJ/MM/AAAA\n")
         # Si un tournoi porte déjà la même nom à la même date, message d'erreur
-        Tournament_Location = input("Où se déroule ce nouveau tournoi?")
-        Tournament_Player1 = input("Quel est le nom du 1er joueur?")
-        Tournament_Player2 = input("Quel est le nom du 2e joueur?")
-        Tournament_Player3 = input("Quel est le nom du 3e joueur?")
-        Tournament_Player4 = input("Quel est le nom du 4e joueur?")
-        Tournament_Player5 = input("Quel est le nom du 5e joueur?")
-        Tournament_Player6 = input("Quel est le nom du 6e joueur?")
-        Tournament_Player7 = input("Quel est le nom du 7e joueur?")
-        Tournament_Player8 = input("Quel est le nom du 8e joueur?")
+        Tournament_Location = input("Où se déroule ce nouveau tournoi?\n")
+        player_dictionnary = {}
+        for player_index in range(1,9):
+            player_first_name = input("Quel est le prénom du joueur n°{} à \
+ajouter?\n".format(player_index))
+            player_last_name = input("Quel est le nom du joueur n°{} à \
+ajouter?\n".format(player_index))
+            player_found = False
+            while player_found == False:
+                for player in model.Player.PLAYERS:
+                    if player_first_name == player.first_name and \
+player_last_name == player.last_name:
+                        print("\nCe joueur a bien été rajouté à la liste\n")
+                        player_dictionnary[player_index] = [player_first_name, player_last_name]
+                        player_found = True
+                if player_found == True:
+                    pass
+                else:
+                    print("Il n'existe pas encore de joueur portant ce nom\n")
+                    response = input("Souhaitez-vous retourner au menu ? O/N\n")
+                    if response == "O":
+                        return "Tournament_menu"
+                    player_first_name = input("Quel est le prénom du joueur n°{} à \
+ajouter?\n".format(player_index))
+                    player_last_name = input("Quel est le nom du joueur n°{} à \
+ajouter?\n".format(player_index))
+        # Tournament_Player1_surname = input("Quel est le prénom du 1er joueur?\n")
+        # Tournament_player1_name = input("Quel est le nom du 1er joueur?\n")
+        # Tournament_Player2_surname = input("Quel est le prénom du 2e joueur?\n")
+        # Tournament_player1_name = input("Quel est le nom du 2e joueur?\n")
+        # Tournament_Player3_surname = input("Quel est le prénom du 3e joueur?\n")
+        # Tournament_player1_name = input("Quel est le nom du 3e joueur?\n")
+        # Tournament_Player4_surname = input("Quel est le prénom du 4e joueur?\n")
+        # Tournament_player1_name = input("Quel est le nom du 4e joueur?\n")
+        # Tournament_Player5_surname = input("Quel est le prénom du 5e joueur?\n")
+        # Tournament_player1_name = input("Quel est le nom du 5e joueur?\n")
+        # Tournament_Player6_surname = input("Quel est le prénom du 6e joueur?\n")
+        # Tournament_player1_name = input("Quel est le nom du 6e joueur?\n")
+        # Tournament_Player7_surname = input("Quel est le prénom du 7e joueur?\n")
+        # Tournament_player1_name = input("Quel est le nom du 7e joueur?\n")
+        # Tournament_Player8_surname = input("Quel est le prénom du 8e joueur?\n")
+        # Tournament_player1_name = input("Quel est le nom du 8e joueur?\n")
         Time_Preference = input("'Bullet', 'Blitz' ou 'Coup rapide'?")
         Description = input("Comment décrire ce tournoi de manière brève?")
         print("Les informations de votre nouveau tournoi ont été enregistrées, elles \
 restent modifiables en choisissant l'option 'Modifier les informations de ce tournoi'")
         return [Tournament_Name, Tournament_Date, Tournament_Location, \
-Tournament_Player1, Tournament_Player2, Tournament_Player3, \
-Tournament_Player4, Tournament_Player5, Tournament_Player6, \
-Tournament_Player7, Tournament_Player8, Time_Preference, \
-Description]
+player_dictionnary, Time_Preference, Description]
+#         return [Tournament_Name, Tournament_Date, Tournament_Location, \
+# Tournament_Player1, Tournament_Player2, Tournament_Player3, \
+# Tournament_Player4, Tournament_Player5, Tournament_Player6, \
+# Tournament_Player7, Tournament_Player8, Time_Preference, \
+# Description]
 
     @classmethod
     def show_create_matches(cls): 

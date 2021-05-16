@@ -242,7 +242,13 @@ class FromTournament:
     def take_response(self, response):
         self.response = response
         if response[1] == "Create_tournament":
+            if len(md.Player.PLAYERS) < 8:
+                print("ERREUR : Il n'existe pas assez de joueurs \
+enregistrés pour créer un tournoi")
+                return "Tournament_menu"
             Tournament_list_of_values = sh_to.show_create_tournament()
+            for value in Tournament_list_of_values:
+                print(value)
             return "Create_matches"
 
         if response[1] == "Matches_result":
@@ -253,7 +259,12 @@ class FromTournament:
             return ""
 
         if response[1] == "Back_to_tournament_menu":
-            return ""
+            return "Tournament_menu"
+
+        if response[1] == "SaveAndLoad":
+            return "SaveAndLoad_menu"
+        if response[1] == "Menu":
+            return "Menu"
 
         else:
             print("Un choix non prévu a été effectué en venant de {}".\

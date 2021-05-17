@@ -52,6 +52,12 @@ sur ENTRÉE.\n")
         Tournament_Name = input("Quel est le nom de ce nouveau tournoi?\n")
         Tournament_Date = input("Quelle est la date de ce nouveau tournoi? \
 JJ/MM/AAAA\n")
+        found_date = re.compile(r"\d\d/\d\d/\d\d\d\d").search(Tournament_Date)
+        while not found_date:
+            print("Veuillez entrer une date au bon format svp")
+            Tournament_Date = input("Quelle est la date de ce nouveau tournoi? \
+JJ/MM/AAAA\n")
+            found_date = re.compile(r"\d\d/\d\d/\d\d\d\d").search(Tournament_Date)
         # Si un tournoi porte déjà la même nom à la même date, message d'erreur
         Tournament_Location = input("Où se déroule ce nouveau tournoi?\n")
         player_dictionnary = {}
@@ -79,39 +85,32 @@ player_last_name == player.last_name:
 ajouter?\n".format(player_index))
                     player_last_name = input("Quel est le nom du joueur n°{} à \
 ajouter?\n".format(player_index))
-        # Tournament_Player1_surname = input("Quel est le prénom du 1er joueur?\n")
-        # Tournament_player1_name = input("Quel est le nom du 1er joueur?\n")
-        # Tournament_Player2_surname = input("Quel est le prénom du 2e joueur?\n")
-        # Tournament_player1_name = input("Quel est le nom du 2e joueur?\n")
-        # Tournament_Player3_surname = input("Quel est le prénom du 3e joueur?\n")
-        # Tournament_player1_name = input("Quel est le nom du 3e joueur?\n")
-        # Tournament_Player4_surname = input("Quel est le prénom du 4e joueur?\n")
-        # Tournament_player1_name = input("Quel est le nom du 4e joueur?\n")
-        # Tournament_Player5_surname = input("Quel est le prénom du 5e joueur?\n")
-        # Tournament_player1_name = input("Quel est le nom du 5e joueur?\n")
-        # Tournament_Player6_surname = input("Quel est le prénom du 6e joueur?\n")
-        # Tournament_player1_name = input("Quel est le nom du 6e joueur?\n")
-        # Tournament_Player7_surname = input("Quel est le prénom du 7e joueur?\n")
-        # Tournament_player1_name = input("Quel est le nom du 7e joueur?\n")
-        # Tournament_Player8_surname = input("Quel est le prénom du 8e joueur?\n")
-        # Tournament_player1_name = input("Quel est le nom du 8e joueur?\n")
-        Time_Preference = input("'Bullet', 'Blitz' ou 'Coup rapide'?")
-        Description = input("Comment décrire ce tournoi de manière brève?")
+        Time_Preference = input("'Bullet', 'Blitz' ou 'Coup rapide'?\n")
+        while Time_Preference not in ['Bullet', 'Blitz', 'Coup rapide']:
+            print("Veuillez entrer un mode de temps au bon format svp")
+            Time_Preference = input("'Bullet', 'Blitz' ou 'Coup rapide'?\n")
+        Description = input("Comment décrire ce tournoi de manière brève?\n")
         print("Les informations de votre nouveau tournoi ont été enregistrées, elles \
-restent modifiables en choisissant l'option 'Modifier les informations de ce tournoi'")
+restent modifiables en choisissant l'option 'Modifier les informations de ce tournoi'\n")
         return [Tournament_Name, Tournament_Date, Tournament_Location, \
 player_dictionnary, Time_Preference, Description]
-#         return [Tournament_Name, Tournament_Date, Tournament_Location, \
-# Tournament_Player1, Tournament_Player2, Tournament_Player3, \
-# Tournament_Player4, Tournament_Player5, Tournament_Player6, \
-# Tournament_Player7, Tournament_Player8, Time_Preference, \
-# Description]
+
 
     @classmethod
-    def show_create_matches(cls): 
-        print("Les paires de joueurs crées pour ce round sont ", end=" ")
-        print("{1}, {2}, {3}, {4}".format("paire1", "paire2", "paire3", "paire"))
-
+    def show_create_matches(cls, Tournament_name):
+        for tournament in model.Tournament.TOURNAMENTS:
+            if tournament.name == Tournament_name:
+                our_tournament = tournament
+                break
+        pairs = our_tournament.generate_pairs_of_players(our_tournament.players)
+        pairs_names = []
+        for pair in pairs:
+            new_pair = "{} {} contre {} {}".format(pair[0].first_name, pair[0].last_name, \
+pair[1].first_name, pair[1].last_name)
+            pairs_names.append(new_pair)
+        print("Les paires de joueurs crées pour ce round sont: \n")
+        print("{0}\n{1}\n{2}\n{3}".format(pairs_names[0], pairs_names[1], pairs_names[2], \
+pairs_names[3]))
         print("\nVos options sont: \n")
         print("Option '1' = Entrer le résultat des matchs")
         print("Option '2' = Modifier les informations de ce tournoi")

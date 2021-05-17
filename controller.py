@@ -60,8 +60,8 @@ def take_option(option=False):
             path = tournament_menu_dict[new_option]
             return ["Tournament", path]
 
-    elif option == "Create_matches":
-        sh_to.show_create_matches()
+    elif option[0] == "Create_matches":
+        sh_to.show_create_matches(option[1])
         create_tournament_dict = {1:"Matches_result", 2:"Modify_tournament_info", \
 3:"Back_to_tournament_menu"}
         new_option = input()
@@ -130,11 +130,18 @@ def take_option(option=False):
 #########################################
 #########################################
 
-def generate_pair_of_players(list_of_players):
-    players = [player1, player2, player3, player4, player5, player6, player7, \
-player8]
-    for i in len(list_of_players):
-        players[i] = list_of_players[i-1]
+
+def other_generations_of_pairs():
+    pass
+    # 1) triez les joueurs en fonctions de leur classement au début du 1er tour
+    # 2) divisez les joueurs en une moitié sup et une moitié inf, le meilleur
+    # joueur d'une moitié est jumelé avec le meilleur joueur de l'autre moitié
+    # 3) Au prochain tour, triez tous les joueurs en fonction de leurs points, si plusieurs
+    # joueurs on le même nombre de points, triez les en fonction de leur rang
+    # 4) Associez le joueur 1 avec le joueur 2, le joueur 3 avec le 4 etc.
+    # Mais si le joueur 1 a déjà joué avec le joueur 2, associez-le plutôt avec le joueur 3
+    # répétez jusqu'à ce que le tournoi soit terminé
+
 
 #########################################
 #########################################
@@ -246,10 +253,10 @@ class FromTournament:
                 print("ERREUR : Il n'existe pas assez de joueurs \
 enregistrés pour créer un tournoi")
                 return "Tournament_menu"
-            Tournament_list_of_values = sh_to.show_create_tournament()
-            for value in Tournament_list_of_values:
-                print(value)
-            return "Create_matches"
+            Tournament_list = sh_to.show_create_tournament()
+            md.Tournament(Tournament_list[0], Tournament_list[1], \
+Tournament_list[2], Tournament_list[3], Tournament_list[4], Tournament_list[5])
+            return ["Create_matches", Tournament_list[0]]
 
         if response[1] == "Matches_result":
             Matches_list_of_values = sh_to.show_enter_matches()

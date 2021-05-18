@@ -191,7 +191,7 @@ player1, player2 , player1_result, player2_result)
 player[1] == player_instance.last_name:
                     players_instances.append(player_instance)
         for player in players_instances:
-            print("{} {} scored {} points".format(player.first_name, player.last_name, \
+            print("Le score final de {} {} est de {} points".format(player.first_name, player.last_name, \
 player.score_in_tournament))
             player.score_in_tournament = 0
 

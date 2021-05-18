@@ -76,7 +76,6 @@ def take_option(option=False):
         else:
             new_option = int(new_option)
             path = create_tournament_dict[new_option]
-            print("le path avant de renvoyer à go_to_path est {}".format(path))
             return ["Tournament", path, option[1]]
 
     # Si on veut aller dans la CREATION DE JOUEUR
@@ -148,29 +147,92 @@ def save_instances(data_file):
             serialized_players.append(serialized_player)
 
     serialized_tournaments = []
+    serialized_tournament_rounds = []
+    serialized_tournament_pairs = []
     if len(md.Tournament.TOURNAMENTS) < 1:
         pass
     else:
         for tournament in md.Tournament.TOURNAMENTS:
+
+            simplified_pairs_for_tinydb = []
+            for pairs_of_a_round in tournament.Pairs:
+                simplified_pair_of_a_round = []
+                for pair in pairs_of_a_round:
+                    simplified_pair = []
+                    for player in pair:
+                        player = [player.first_name, player.last_name]
+                        simplified_pair.append(player)
+                    simplified_pair_of_a_round.append(simplified_pair)
+                simplified_pairs_for_tinydb.append(simplified_pair_of_a_round)
+
             serialized_tournament = {
                 'name': tournament.name, 
                 'location': tournament.location,
                 'date': tournament.date, 
                 'players': tournament.players,
                 'time_mode': tournament.time_mode, 
-                'description': tournament.description,
-                'Rounds': tournament.Rounds, 
+                'description': tournament.description, 
                 'number_of_rounds': tournament.number_of_rounds,
-                'Pairs': tournament.Pairs
+                'Pairs': simplified_pairs_for_tinydb
             }
             serialized_tournaments.append(serialized_tournament)
+            for round in tournament.Rounds:
+                simplified_matches_results = []
+                for match_result in round.matches_results:
+                    simplified_match_result = []
+                    for list_of_player_and_score in match_result:
+                        player_instance_to_format = [list_of_player_and_score[0].first_name,\
+list_of_player_and_score[0].last_name]
+                        player_score = list_of_player_and_score[1]
+                        new_list = [player_instance_to_format, player_score]
+                        simplified_match_result.append(new_list)
+                simplified_matches_results.append(simplified_match_result)
 
+                serialized_round = {
+                    'name' : round.name,
+                    'matches_results' : simplified_matches_results,
+                    'first_timestamp' : round.first_timestamp,
+                    'last_timestamp' : round.last_timestamp,
+                    'tournament_name' : tournament.name,
+                    'round_index' : (int((round.name[-1])) - 1)
+                }
+                
+                serialized_tournament_rounds.append(serialized_round)
     players_table = db.table('players')
     players_table.truncate()
     players_table.insert_multiple(serialized_players)
     tournaments_table = db.table('tournaments')
     tournaments_table.truncate()
     tournaments_table.insert_multiple(serialized_tournaments)
+    rounds_table = db.table('rounds')
+    rounds_table.truncate()
+    rounds_table.insert_multiple(serialized_tournament_rounds)
+
+
+    # serialized_tournaments = []
+    # if len(md.Tournament.TOURNAMENTS) < 1:
+    #     pass
+    # else:
+    #     for tournament in md.Tournament.TOURNAMENTS:
+    #         serialized_tournament = {
+    #             'name': tournament.name, 
+    #             'location': tournament.location,
+    #             'date': tournament.date, 
+    #             'players': tournament.players,
+    #             'time_mode': tournament.time_mode, 
+    #             'description': tournament.description,
+    #             'Rounds': tournament.Rounds, 
+    #             'number_of_rounds': tournament.number_of_rounds,
+    #             'Pairs': tournament.Pairs
+    #         }
+    #         serialized_tournaments.append(serialized_tournament)
+
+    # players_table = db.table('players')
+    # players_table.truncate()
+    # players_table.insert_multiple(serialized_players)
+    # tournaments_table = db.table('tournaments')
+    # tournaments_table.truncate()
+    # tournaments_table.insert_multiple(serialized_tournaments)
 
 
 def load_instances(data_file):
@@ -206,15 +268,64 @@ def load_instances(data_file):
         players = list_of_tournament_values[3]
         time_mode = list_of_tournament_values[4]
         description = list_of_tournament_values[5]
-        Rounds = list_of_tournament_values[6]
-        number_of_rounds = list_of_tournament_values[7]
-        Pairs = list_of_tournament_values[8]
+        number_of_rounds = list_of_tournament_values[6]
+        simplified_pairs = list_of_tournament_values[7]
+
+        Pairs_of_instanced_players = []
+        for pairs_of_a_round in simplified_pairs:
+            real_pair_of_a_round = []
+            for pair in pairs_of_a_round:
+                real_pair = []
+                for player_of_pair in pair:
+                    for player in md.Player.PLAYERS:
+                        if player_of_pair[0] == player.first_name and \
+player_of_pair[1] == player.last_name:
+                            real_pair.append(player)
+                real_pair_of_a_round.append(real_pair)
+            Pairs_of_instanced_players.append(real_pair_of_a_round)
 
         tournament_instance = md.Tournament(name, date, location, players, time_mode, description)
         tournament_instance.number_of_rounds = number_of_rounds
-        tournament_instance.Rounds = Rounds
-        tournament_instance.Pairs = Pairs
+        tournament_instance.Pairs = Pairs_of_instanced_players
 
+        rounds_table = db.table('rounds')
+        # IMPORTANT A REFAIRE, DOIT PRENDRE EN COMPTE LE PARAMETRE [0] QUI EST LE NOM DU TOURNOI
+        serialized_rounds = rounds_table.all()
+        for round in serialized_rounds:
+            list_of_round_values = []
+            for value in round.values():
+                list_of_round_values.append(value)
+            name_of_round = list_of_tournament_values[0]
+            simplified_matches_results = list_of_round_values[1]
+            first_timestamp = list_of_round_values[2]
+            last_timestamp = list_of_round_values[3]
+            tournament_name_of_round = list_of_round_values[4]
+            round_index = list_of_round_values[5]
+
+            
+            real_matches_results = []
+            for match_result in simplified_matches_results:
+                real_match_result = []
+                for list_of_player_and_score in match_result:
+                    player_name = [list_of_player_and_score[0][0],\
+list_of_player_and_score[0][1]]
+                    player_score = list_of_player_and_score[1]
+                    for player in md.Player.PLAYERS:
+                        if player_name[0] == player.first_name and \
+player_name[1] == player.last_name:
+                            new_list = [player, player_score]
+                            real_match_result.append(new_list)
+            real_matches_results.append(real_match_result)
+                
+
+            for tournament in md.Tournament.TOURNAMENTS:
+                if tournament.name == tournament_name_of_round:
+                    our_round = tournament.Rounds[round_index]
+                    our_round.name = name_of_round
+                    our_round.matches_results = real_matches_results
+                    our_round.first_timestamp = first_timestamp
+                    our_round.last_timestamp = last_timestamp
+                    break
 
 #########################################
 #########################################
@@ -452,20 +563,20 @@ def go_to_path(response):
 #########################################
 
 # LA BOUCLE NORMALE SANS AIDE AU DEBUGGAGE
-def main():
-    """La fonction main consiste essentiellement à afficher des choix à
-    l'utilisateur, pour ensuite récupérer son input avec take_option(). 
-    On utilisera ensuite son input pour naviguer dans les menus du
-    programme avec go_to_path pour ensuite lui proposer à nouveau d'autres
-    choix. 
-    Cette boucle s'arrêtera avec l'arrêt du programme si l'utilisateur
-    l'indique dans ses choix où si le programme reçoit une commande inconnue.
-    """
-    first_input = take_option()
-    new_input = go_to_path(first_input)
-    while True: 
-        new_option = take_option(new_input)
-        new_input = go_to_path(new_option)
+# def main():
+#     """La fonction main consiste essentiellement à afficher des choix à
+#     l'utilisateur, pour ensuite récupérer son input avec take_option(). 
+#     On utilisera ensuite son input pour naviguer dans les menus du
+#     programme avec go_to_path pour ensuite lui proposer à nouveau d'autres
+#     choix. 
+#     Cette boucle s'arrêtera avec l'arrêt du programme si l'utilisateur
+#     l'indique dans ses choix où si le programme reçoit une commande inconnue.
+#     """
+#     first_input = take_option()
+#     new_input = go_to_path(first_input)
+#     while True: 
+#         new_option = take_option(new_input)
+#         new_input = go_to_path(new_option)
         
 
 
@@ -484,28 +595,28 @@ def main():
 
 # UNE BOUCLE ALTERNATIVE CHARGEANT 8 JOUEURS ET AMENANT DIRECTEMENT 
 # À LA CRÉA DES MATCHES D'UN TOURNOI
-# def main():
+def main():
     
-#     player1 = md.Player("John", "Doe", "12/01/1930", "M")
-#     player2 = md.Player("Jane", "Doe", "17/04/1926", "F")
-#     player3 = md.Player("Jojo", "Rabbit", "19/04/1928", "M")
-#     player4 = md.Player("Joselaine", "Dabit", "20/04/1922", "F")
-#     player5 = md.Player("Polo", "LePolo", "11/06/1815", "M")
-#     player6 = md.Player("Carabine", "LeCarabin", "16/05/1982", "M")
-#     player7 = md.Player("Canelle", "Doublekick", "12/11/1956", "F")
-#     player8 = md.Player("Gaelle", "Belle", "12/11/1965", "M")
+    player1 = md.Player("John", "Doe", "12/01/1930", "M")
+    player2 = md.Player("Jane", "Doe", "17/04/1926", "F")
+    player3 = md.Player("Jojo", "Rabbit", "19/04/1928", "M")
+    player4 = md.Player("Joselaine", "Dabit", "20/04/1922", "F")
+    player5 = md.Player("Polo", "LePolo", "11/06/1815", "M")
+    player6 = md.Player("Carabine", "LeCarabin", "16/05/1982", "M")
+    player7 = md.Player("Canelle", "Doublekick", "12/11/1956", "F")
+    player8 = md.Player("Gaelle", "Belle", "12/11/1965", "M")
 
-#     ex_tournament = md.Tournament("Exemple_tournament", "12/11/1999", "Las Vegas", \
-# {1:["John", "Doe"], 2:["Jane", "Doe"], 3:["Jojo", "Rabbit"], 4:["Joselaine", "Dabit"], 5:["Polo", "LePolo"], \
-# 6:["Carabine", "LeCarabin"], 7:["Canelle", "Doublekick"], 8:["Gaelle", "Belle"]}, "Bullet", "no_description")
+    ex_tournament = md.Tournament("Exemple_tournament", "12/11/1999", "Las Vegas", \
+{1:["John", "Doe"], 2:["Jane", "Doe"], 3:["Jojo", "Rabbit"], 4:["Joselaine", "Dabit"], 5:["Polo", "LePolo"], \
+6:["Carabine", "LeCarabin"], 7:["Canelle", "Doublekick"], 8:["Gaelle", "Belle"]}, "Bullet", "no_description")
 
-#     new_option = take_option(["Create_matches", ex_tournament.name])
-#     new_input = go_to_path(new_option)
-#     while True: 
-#         new_option = take_option(new_input)
-#         if new_option[1] == "admin":
-#             break
-#         new_input = go_to_path(new_option)
+    new_option = take_option(["Create_matches", ex_tournament.name])
+    new_input = go_to_path(new_option)
+    while True: 
+        new_option = take_option(new_input)
+        if new_option[1] == "admin":
+            break
+        new_input = go_to_path(new_option)
         
         
     

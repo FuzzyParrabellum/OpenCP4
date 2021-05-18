@@ -215,7 +215,8 @@ class Round:
     def begin_round(self):
         """fonctionnalité à développer - indique l'heure de début d'un round
         """
-        self.first_timestamp = datetime.datetime.now()
+        timestamp_to_format = datetime.datetime.now()
+        self.first_timestamp = timestamp_to_format.strftime("%m-%d-%Y, %H:%M:%S")
         
     
     def set_matches_result(self, player1, player2, player1_result, player2_result):
@@ -231,5 +232,6 @@ class Round:
     def end_round(self):
         """fonctionnalité à développer - indique l'heure de fin d'un round
         """
-        self.last_timestamp = datetime.datetime.now()
+        timestamp_to_format = datetime.datetime.now()
+        self.last_timestamp = timestamp_to_format.strftime("%m-%d-%Y, %H:%M:%S")
 

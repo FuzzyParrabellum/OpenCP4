@@ -1,8 +1,11 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-import os
 import json
+import sys
+sys.path.append('env/Lib/site-packages')
+from tinydb import TinyDB
+
 
 import model as md
 from views import ShowMenu as sh_me
@@ -123,6 +126,95 @@ def take_option(option=False):
         print("Navigation not found")
         pass
         
+
+def save_instances(data_file):
+    """
+    """
+    db = TinyDB(data_file)
+
+    serialized_players = []
+    if len(md.Player.PLAYERS) < 1:
+        pass
+    else:
+        for player in md.Player.PLAYERS:
+            serialized_player = {
+            'first_name': player.first_name, 
+            'last_name': player.last_name,
+            'birthdate': player.birthdate, 
+            'sex': player.sex,
+            'ranking': player.ranking, 
+            'score_in_tournament': player.score_in_tournament
+            }
+            serialized_players.append(serialized_player)
+
+    serialized_tournaments = []
+    if len(md.Tournament.TOURNAMENTS) < 1:
+        pass
+    else:
+        for tournament in md.Tournament.TOURNAMENTS:
+            serialized_tournament = {
+                'name': tournament.name, 
+                'location': tournament.location,
+                'date': tournament.date, 
+                'players': tournament.players,
+                'time_mode': tournament.time_mode, 
+                'description': tournament.description,
+                'Rounds': tournament.Rounds, 
+                'number_of_rounds': tournament.number_of_rounds,
+                'Pairs': tournament.Pairs
+            }
+            serialized_tournaments.append(serialized_tournament)
+
+    players_table = db.table('players')
+    players_table.truncate()
+    players_table.insert_multiple(serialized_players)
+    tournaments_table = db.table('tournaments')
+    tournaments_table.truncate()
+    tournaments_table.insert_multiple(serialized_tournaments)
+
+
+def load_instances(data_file):
+    """important - si il n'existe pas encore de sauvegarde, renvoyer un message d'erreur
+    """
+    db = TinyDB(data_file)
+
+    players_table = db.table('players')
+    serialized_players = players_table.all()
+    for player in serialized_players:
+        list_of_player_values = []
+        for value in player.values():
+            list_of_player_values.append(value)
+        first_name = list_of_player_values[0]
+        last_name = list_of_player_values[1]
+        birthdate = list_of_player_values[2]
+        sex = list_of_player_values[3]
+        ranking = list_of_player_values[4]
+        score_in_tournament = list_of_player_values[5]
+        player_instance = md.Player(first_name, last_name, birthdate, sex)
+        player_instance.ranking = ranking
+        player_instance.score_in_tournament = score_in_tournament
+
+    tournaments_table = db.table('tournaments')
+    serialized_tournaments = tournaments_table.all()
+    for tournament in serialized_tournaments:
+        list_of_tournament_values = []
+        for value in tournament.values():
+            list_of_tournament_values.append(value)
+        name = list_of_tournament_values[0]
+        location = list_of_tournament_values[1]
+        date = list_of_tournament_values[2]
+        players = list_of_tournament_values[3]
+        time_mode = list_of_tournament_values[4]
+        description = list_of_tournament_values[5]
+        Rounds = list_of_tournament_values[6]
+        number_of_rounds = list_of_tournament_values[7]
+        Pairs = list_of_tournament_values[8]
+
+        tournament_instance = md.Tournament(name, date, location, players, time_mode, description)
+        tournament_instance.number_of_rounds = number_of_rounds
+        tournament_instance.Rounds = Rounds
+        tournament_instance.Pairs = Pairs
+
 
 #########################################
 #########################################
@@ -293,10 +385,25 @@ class FromSaveAndLoad:
     def take_response(self, response):
         self.response = response
         if response[1] == "New_save":
-            return ""
+            data_export_file = 'Data.json'
+            if len(md.Player.PLAYERS) == 0 and len(md.Tournament.TOURNAMENTS) == 0:
+                print("\nERREUR : Il n'y a pas de données à enregistrer\n")
+                return "SaveAndLoad_menu"
+            else:
+                save_instances(data_export_file)
+                print("\nVos données ont bien été sauvegardées dans {}\n".format(data_export_file))
+            return "SaveAndLoad_menu"
 
         if response[1] == "Load_save":
-            return ""
+            source_data = 'Data.json'
+            with open(source_data) as f:
+                data = json.load(f)
+                if not data:
+                    print("\nIl n'y a pas de données à importer venant du fichier {} !!\n".format(source_data))
+                    return "SaveAndLoad_menu"
+            load_instances(source_data)
+            print("\nLes données ont bien été chargées depuis {}\n".format(source_data))
+            return "SaveAndLoad_menu"
 
         if response[1] == "Menu":
             return "Menu"

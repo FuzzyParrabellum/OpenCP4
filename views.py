@@ -106,6 +106,7 @@ player_dictionnary, Time_Preference, Description]
             if our_tournament.Rounds[round_index].matches_results == []:
                 our_round_index = round_index
                 break
+        our_tournament.Rounds[round_index].begin_round()
         if our_round_index == 0:
             pairs = our_tournament.generate_pairs_of_players(our_tournament.players)
             pairs_names = []
@@ -169,6 +170,7 @@ pairs_names[3]))
 player1, player2 , player1_result, player2_result)
         print("\nTous les résultats du Round {} ont bien été enregistrés\n"\
 .format(our_round_index + 1))
+        our_tournament.Rounds[round_index].end_round()
         return [our_tournament, our_round_index]
         
     @classmethod
@@ -261,8 +263,7 @@ quelle action souhaitez-vous effectuer?")
         print("Pour effectuer une action, tapez son numéro dans la console et appuyez \
 sur ENTRÉE.\n")
         print("Option '1' = Créer une nouvelle sauvegarde")
-        print("Option '2' = Afficher les sauvegardes précédentes / Charger \
-une sauvegarde")
+        print("Option '2' = Charger une sauvegarde")
         print("Option '3' = Revenir au menu")
         print("Option '4' = Quitter le programme")
         print("\nEntrez votre commande ci-dessous...")

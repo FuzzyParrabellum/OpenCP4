@@ -1,6 +1,8 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
+import datetime 
+
 class Player:
 
     NUMBER_OF_PLAYERS = 0
@@ -123,7 +125,7 @@ player[1] == player_instance.last_name:
         """reclassify_if_equal prend en paramètre une liste de joueurs 
         renvoyée par la méthode generate_new_pairs, qui est déjà classée
         selon le score des joueurs pendant le tournoi.
-        Si plusieurs de ces joueurs ont des scores égaux,la méthode va
+        Si plusieurs de ces joueurs ont des scores égaux, la méthode va
         renvoyer une nouvelle liste en reclassant ces joueurs selon leur
         classement.
         """
@@ -207,12 +209,15 @@ class Round:
         self.name = name
         matches_results = []
         self.matches_results = matches_results
+        self.first_timestamp = "Cette tournée n°{} n'a pas encore commencée".format(self.name[-1])
+        self.last_timestamp = "Cette tournée n°{} n'est pas encore terminée".format(self.name[-1])
 
     def begin_round(self):
         """fonctionnalité à développer - indique l'heure de début d'un round
         """
-        first_timestamp = 0
-
+        self.first_timestamp = datetime.datetime.now()
+        
+    
     def set_matches_result(self, player1, player2, player1_result, player2_result):
         """set_matches_result permet de créer un tuple contenant le score correspondant
         à chaque joueur à la fin d'un match. Chaque tuple sera ajouté dans la liste 
@@ -226,5 +231,5 @@ class Round:
     def end_round(self):
         """fonctionnalité à développer - indique l'heure de fin d'un round
         """
-        last_timestamp = 0
+        self.last_timestamp = datetime.datetime.now()
 

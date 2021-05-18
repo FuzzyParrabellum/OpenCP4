@@ -102,12 +102,25 @@ player_dictionnary, Time_Preference, Description]
             if tournament.name == Tournament_name:
                 our_tournament = tournament
                 break
-        pairs = our_tournament.generate_pairs_of_players(our_tournament.players)
-        pairs_names = []
-        for pair in pairs:
-            new_pair = "{} {} contre {} {}".format(pair[0].first_name, pair[0].last_name, \
-pair[1].first_name, pair[1].last_name)
-            pairs_names.append(new_pair)
+        for round_index in range(len(our_tournament.Rounds)):
+            if our_tournament.Rounds[round_index].matches_results == []:
+                our_round_index = round_index
+                break
+        if our_round_index == 0:
+            pairs = our_tournament.generate_pairs_of_players(our_tournament.players)
+            pairs_names = []
+            for pair in pairs:
+                new_pair = "{} {} contre {} {}".format(pair[0].first_name, pair[0].last_name, \
+    pair[1].first_name, pair[1].last_name)
+                pairs_names.append(new_pair)
+        else:
+            pairs = our_tournament.generate_new_pairs()
+            pairs_names = []
+            for pair in pairs:
+                new_pair = "{} {} contre {} {}".format(pair[0].first_name, pair[0].last_name, \
+    pair[1].first_name, pair[1].last_name)
+                pairs_names.append(new_pair)
+
         print("Les paires de joueurs crées pour ce round sont: \n")
         print("{0}\n{1}\n{2}\n{3}".format(pairs_names[0], pairs_names[1], pairs_names[2], \
 pairs_names[3]))
@@ -117,43 +130,69 @@ pairs_names[3]))
         print("Option '3' = Revenir à la page de création et d'affichage de tournoi")
 
     @classmethod
-    def show_enter_matches(cls):
-        rounds = []
-        winner = False
-        i = 1
-        for match in range(4): 
-            #adapter ce qu'il y en-dessous en fonction et voir sous quel format les rounds doivent être enregistrés
-            match = input("Rentrez maintenant le résultat du match n°1: ")
-            while not winner:
-                result = input("Rentrez maintenant le résultat du tour n°{}".format(i))
-                i += 1
-                rounds.append(result)
-                if result == "checkmate":
-                    winner = True     
-        sure_match1 = input("Voulez-vous modifier ce résultat ? 'Oui'/'Non'")
-        match2 = input("Rentrez maintenant le résultat du match n°2: ")
-        sure_match2 = input("Voulez-vous modifier ce résultat ? 'Oui'/'Non'")
-        match3 = input("Rentrez maintenant le résultat du match n°3: ")
-        sure_match3 = input("Voulez-vous modifier ce résultat ? 'Oui'/'Non'")
-        match4 = input("Rentrez maintenant le résultat du match n°4: ")
-        sure_match4 = input("Voulez-vous modifier ce résultat ? 'Oui'/'Non'")
-        return [sure_match1, ]
-        
-"""     
+    def show_enter_matches(cls, Tournament_name):
+        for tournament in model.Tournament.TOURNAMENTS:
+            if tournament.name == Tournament_name:
+                our_tournament = tournament
+                break
+        for round_index in range(len(our_tournament.Rounds)):
+            if our_tournament.Rounds[round_index].matches_results == []:
+                our_round_index = round_index
+                break
+        current_round_pairs = our_tournament.Pairs[our_round_index]
+        for index_of_pair in range(len(current_round_pairs)):
+            print("Rentrez maintenant le résultat du match n°{}:\n".format(index_of_pair+1))
+            player1 = current_round_pairs[index_of_pair][0]
+            player2 = current_round_pairs[index_of_pair][1]
+            player1_name = "{} {}".format(player1.first_name, player1.last_name)
+            player2_name = "{} {}".format(player2.first_name, player2.last_name)
+            result = input("Quel est le résultat du joueur {}?\n'G' si il a gagné le match\
+,'E' si il y a eu égalité ou 'P' si il a perdu le match.\n".format(player1_name))
+            while result not in ["G", "E", "P"]:
+                print("\nEntrez seulement un résultat au format indiqué svp 'G', 'E' ou 'P'\n")
+                result = input("Quel est le résultat du joueur {}?\n'G' si il a gagné le match\
+,'E' si il y a eu égalité ou 'P' si il a perdu le match.\n".format(player1_name))
+            if result == "G":
+                player1_result = 1
+                player2_result = 0
+            elif result == "E":
+                player1_result = 0.5
+                player2_result = 0.5
+            elif result == "P":
+                player1_result = 0
+                player2_result = 1
 
-------Option Rentrer le match 1
----------"Qui débute la partie ? Option 1 pour {Joueur1} Option 2 pour {Joueur2}
----------"Entrez maintenant le résultat des tours"
-------------Option 1 Cette pièce s'est déplace en cette position (et a possiblement pris ce pion?) (datedébut et fin automatique)
-------------Option 2 Modifier un tour
-------------Option 3 Partie finie
-------Option Rentrer le match 2
-------Option Rentrer le match 3
-------Option Rentrer le match 4
-------Si les 4 matches sont rentrés, générer les prochaines paires de joueur et recommencer la boucle jusqu'au dernier match
-------Si le nouveau tournoi a le même nom et est à la même date qu'un autre tournoi, alors ne pas l'ajouter et afficher 
-message d'erreur."""
-    
+            print("{} gagne {} point.\n".format(player1_name, player1_result))
+            print("{} gagne {} point.\n".format(player2_name, player2_result))
+
+            our_tournament.Rounds[our_round_index].set_matches_result(\
+player1, player2 , player1_result, player2_result)
+        print("\nTous les résultats du Round {} ont bien été enregistrés\n"\
+.format(our_round_index + 1))
+        return [our_tournament, our_round_index]
+        
+    @classmethod
+    def show_tournament_ending(cls, Tournament_name):
+        for tournament in model.Tournament.TOURNAMENTS:
+            if tournament.name == Tournament_name:
+                our_tournament = tournament
+                break
+        print("\nLe Tournoi {} est maintenant terminé\n".format(Tournament_name))
+        print("\nLes résultats sont :\n")
+        players_list = []
+        for player in our_tournament.players.values():
+            players_list.append(player)
+        players_instances = []
+        for player_instance in model.Player.PLAYERS:
+            for player in players_list:
+                if player[0] == player_instance.first_name and \
+player[1] == player_instance.last_name:
+                    players_instances.append(player_instance)
+        for player in players_instances:
+            print("{} {} scored {} points".format(player.first_name, player.last_name, \
+player.score_in_tournament))
+            player.score_in_tournament = 0
+
 
 class ShowPlayer :
     

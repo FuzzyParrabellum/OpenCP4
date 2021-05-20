@@ -19,6 +19,8 @@ class Player:
         """
         self.first_name = first_name
         self.last_name = last_name
+        full_name = first_name + " " + last_name
+        self.full_name = full_name
         self.birthdate = birthdate
         self.sex = sex
         Player.NUMBER_OF_PLAYERS += 1
@@ -69,7 +71,7 @@ class Tournament:
         Rounds = []
         self.Rounds = Rounds
         for round_int in range(number_of_rounds):
-            Rounds.append(Round("Round {}".format(round_int)))
+            Rounds.append(Round("Round {}".format(round_int + 1)))
         Pairs = []
         self.Pairs = Pairs
 
@@ -192,8 +194,10 @@ equality_list[player_index].last_name]
                         new_index = classified_players.index(play)
                 classified_players = classified_players[0:new_index+1] + \
 [player] + classified_players[new_index+1:]
-        classified_players = list(reversed(classified_players))
-        classified_players = self.reclassify_if_equal(classified_players)
+        right_order_classified_players = list(reversed(classified_players))
+        classified_players = self.reclassify_if_equal(right_order_classified_players)
+        # doit maintenant écrire du code pour faire en sorte que si un joueur a déjà joué contre un autre
+        # il doive maintenant jouer avec encore un autre joueur
         first_group = classified_players[0:4]
         second_group = classified_players[4:]
         pairs = []
@@ -201,6 +205,22 @@ equality_list[player_index].last_name]
             pairs.append([first_group[player_index], second_group[player_index]])
         self.Pairs.append(pairs)
         return pairs
+
+    def transform_pairs_instances_in_pairs_names(self):
+        """Pairs in a tournament are instances of players, this function allows
+        us to replace these instances by the players' first and last name.
+        """
+        transformed_pairs = []
+        for pairs_of_a_round in self.Pairs:
+            simplified_pair_of_a_round = []
+            for pair in pairs_of_a_round:
+                simplified_pair = []
+                for player in pair:
+                    player = [player.first_name, player.last_name]
+                    simplified_pair.append(player)
+                simplified_pair_of_a_round.append(simplified_pair)
+            transformed_pairs.append(simplified_pair_of_a_round)
+        return transformed_pairs
 
 
 class Round:
@@ -234,4 +254,17 @@ class Round:
         """
         timestamp_to_format = datetime.datetime.now()
         self.last_timestamp = timestamp_to_format.strftime("%m-%d-%Y, %H:%M:%S")
+
+    def transform_instances_in_matches(self):
+        simplified_matches_results = []
+        for match_result in self.matches_results:
+            simplified_match_result = []
+            for list_of_player_and_score in match_result:
+                player_instance_to_format = [list_of_player_and_score[0].first_name,\
+list_of_player_and_score[0].last_name]
+                player_score = list_of_player_and_score[1]
+                new_list = [player_instance_to_format, player_score]
+                simplified_match_result.append(new_list)
+            simplified_matches_results.append(simplified_match_result)
+        return simplified_matches_results
 

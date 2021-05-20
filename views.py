@@ -40,16 +40,20 @@ de tournoi, matches et tours, quelle action souhaitez-vous effectuer?")
 sur ENTRÉE.\n")
         print("Option '1' = Créer un tournoi")
         print("Option '2' = Afficher la liste des tournois")
-        print("Option '3' = Choisir un tournoi particulier")
-        print("Option '4' = Revenir au menu")
-        print("Option '5' = Aller à la page de sauvegarde/chargement")
-        print("Option '6' = Quitter le programme")
+        print("Option '3' = Revenir au menu")
+        print("Option '4' = Aller à la page de sauvegarde/chargement")
+        print("Option '5' = Quitter le programme")
         print("\nEntrez votre commande ci-dessous...")
 
     @classmethod
     def show_create_tournament(cls):
         print("Entrez les informations de votre nouveau tournoi")
         Tournament_Name = input("Quel est le nom de ce nouveau tournoi?\n")
+        for tournament in model.Tournament.TOURNAMENTS:
+            if tournament.name == Tournament_Name:
+                print("\nUn tournoi portant ce nom existe déjà, veuillez \
+réessayer de créer un tournoi avec un autre nom svp \n")
+                return "Tournament_menu"
         Tournament_Date = input("Quelle est la date de ce nouveau tournoi? \
 JJ/MM/AAAA\n")
         found_date = re.compile(r"\d\d/\d\d/\d\d\d\d").search(Tournament_Date)
@@ -194,6 +198,22 @@ player[1] == player_instance.last_name:
             print("Le score final de {} {} est de {} points".format(player.first_name, player.last_name, \
 player.score_in_tournament))
             player.score_in_tournament = 0
+
+    @classmethod
+    def show_tournaments_status_options(cls):
+        print("\nQuelle action souhaitez-vous effectuer ensuite?")
+        print("Option '1' = Sélectionner un tournoi en particulier")
+        print("Option '2' = Revenir au menu de création de tournoi")
+        print("Option '3' = Aller à la page de sauvegarde/chargement")
+        print("Option '4' = Quitter le programme")
+        print("\nEntrez votre commande ci-dessous...")
+
+    @classmethod
+    def show_tournament_status(cls):
+        print("\nOption '1' = Liste de tous les tours du tournoi")
+        print("Option '2' = Liste de tous les matches du tournoi")
+        print("Option '3' = Retourner à l'affichage des tournois")
+        print("\nEntrez votre commande ci-dessous...")
 
 
 class ShowPlayer :

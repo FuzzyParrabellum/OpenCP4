@@ -123,58 +123,16 @@ player[1] == player_instance.last_name:
         self.Pairs.append(pairs)
         return pairs
 
-# VERSION 1
-#     def reclassify_if_equal(self, list_of_players):
-#         """reclassify_if_equal prend en paramètre une liste de joueurs 
-#         renvoyée par la méthode generate_new_pairs, qui est déjà classée
-#         selon le score des joueurs pendant le tournoi.
-#         Si plusieurs de ces joueurs ont des scores égaux, la méthode va
-#         renvoyer une nouvelle liste en reclassant ces joueurs selon leur
-#         classement.
-#         """
-#         new_list = []
-#         for player in list_of_players:
-#             current_index = list_of_players.index(player)
-#             print("le current index est de {}".format(current_index))
-#             if player == list_of_players[-1]:
-#                 if player in new_list:
-#                     pass
-#                 else:
-#                     new_list.append(player)
-#             else:
-#                 next_player = list_of_players[current_index+1]
-#                 if player.score_in_tournament != next_player.score_in_tournament:
-#                     if player in new_list:
-#                         pass
-#                     else:
-#                         new_list.append(player)
-#                 elif player.score_in_tournament == next_player.score_in_tournament:
-#                     number_of_successive_equalities = 1
-#                     if player in new_list:
-#                         pass
-#                     elif len(list_of_players[current_index+1:]) > 1:
-#                         for play_index in range(len(list_of_players[current_index+1:])):
-#                             next_play = list_of_players[play_index+1]
-#                             if list_of_players[play_index].score_in_tournament == next_play.score_in_tournament:
-#                                 number_of_successive_equalities += 1
-#                         equality_list = list_of_players[current_index : (current_index + 1)\
-# + number_of_successive_equalities]
-#                         dictionnary_of_equal_players = {}
-#                         for player_index in range(len(equality_list)):
-#                             dictionnary_of_equal_players[player_index] = [equality_list[player_index].first_name, \
-# equality_list[player_index].last_name]
-#                         classified_equality_list = self.classify_by_rank(dictionnary_of_equal_players)
-#                         new_list = new_list + classified_equality_list
-#                     else:
-#                         dictionnary_of_equal_players = {}
-#                         for player_index in range(0,2):
-#                             dictionnary_of_equal_players[player_index] = [equality_list[player_index].first_name, \
-# equality_list[player_index].last_name]   
-#                         classified_equality_list = self.classify_by_rank(dictionnary_of_equal_players)
-#                         new_list = new_list + classified_equality_list
-#         return new_list
 
     def classify_successive_equalities(self, player_index, list_of_players):
+        """Cette méthode prend en 1er argument l'index du joueur ayant le même score que le
+        ou les joueurs suivants dans la liste de joueurs passée en deuxième argument.
+        Elle calcule déjà le nombre d'égalités successives, à partir de l'index du joueur
+        placé en 1er paramètre, puis classe ce nombre de joueurs selon leur rang avec
+        la méthode classify_by_rank() qui prend en argument un dictionnaire avec des instances
+        de joueurs. On renvoie ensuite une liste des joueurs égalitaires du début, classée selon
+        leur rang.
+        """
         current_player = list_of_players[player_index]
         new_list = []
         number_of_successive_equalities = 0
@@ -190,8 +148,6 @@ player[1] == player_instance.last_name:
                         break
                 next_play = list_of_players_since_first_equality[play_index]
                 if current_player.score_in_tournament == next_play.score_in_tournament:
-                    print(current_player.full_name)
-                    print(next_play.full_name)
                     number_of_successive_equalities += 1 
             list_of_equal_players = list_of_players[player_index : (player_index + 1)\
 + number_of_successive_equalities]
@@ -212,6 +168,12 @@ list_of_players[player_ind].last_name]
 
 
     def reclassify_list_if_equalities(self, list_of_players):
+        """Cette méthode prend en argument une liste de joueurs, et vérifie pour chaque joueur
+        si le ou les joueurs d'après ont le même score que le joueur actuel. Si c'est le cas, on utilise
+        la méthode classify_successive_equalities(),(qui prend en paramètres l'index du joueur actuel d'après 
+        notre boucle et la liste des joueurs) pour classer ces égalités selon le classement des
+        joueurs en plus de leur score. On renvoie ensuite une nouvelle liste de joueurs, classés selon ce principe.
+        """
         new_list = []
         for player_index in range(len(list_of_players)):
             current_player = list_of_players[player_index]
@@ -230,6 +192,9 @@ list_of_players[player_ind].last_name]
         return new_list
 
     def played_against_before(self, first_player, second_player):
+        """played_against_before vérifie si deux joueurs ont déjà joués l'un contre l'autre,
+        prend deux instances de joueurs en paramètres et renvoie un boolean.
+        """
         already_played_against = False
         for round_pairs in self.Pairs:
             for pairs in round_pairs:
@@ -250,9 +215,6 @@ list_of_players[player_ind].last_name]
             for player_instance in pair:
                 our_players.append(player_instance)
 
-        for player in our_players:
-            print("le score du joueur {} est de {} pour l'instant".format(player.full_name, player.score_in_tournament))
-        print("\n")
         classified_players = []
         for player in our_players:
             if classified_players == []:
@@ -268,51 +230,56 @@ list_of_players[player_ind].last_name]
                 classified_players = classified_players[0:new_index+1] + \
 [player] + classified_players[new_index+1:]
         right_order_classified_players = list(reversed(classified_players))
-        for player in right_order_classified_players:
-            print("le score du joueur {} est de {} après list reversed".format(player.full_name, player.score_in_tournament))
-        print("\n")
         classified_players = self.reclassify_list_if_equalities(right_order_classified_players)
         for player in classified_players:
-            print("le score du joueur {} est de {} après reclassify".format(player.full_name, player.score_in_tournament))
+            print("le score du joueur {} est de {} pour l'instant".format(player.full_name, player.score_in_tournament))
         print("\n")
 
+  
+        last_classification_group = []
+        list_of_players_indexes = range(len(classified_players))
+        for player_index in list_of_players_indexes:
+            current_player = classified_players[player_index]
+            if current_player in last_classification_group:
+                pass
+            else:
+                if player_index == list_of_players_indexes[-1] or player_index == list_of_players_indexes[-2]:
+                    last_classification_group.append(current_player)
+                else:
+                    next_player_index = player_index + 1
+                    next_next_player_index = next_player_index + 1
+                    next_player = classified_players[next_player_index]
+                    next_next_player = classified_players[next_next_player_index]
+                    if self.played_against_before(current_player, next_player) == True:
+                        last_classification_group.append(current_player)
+                        last_classification_group.append(next_next_player)
+                    else:
+                        last_classification_group.append(current_player)
+                        last_classification_group.append(next_player)
+            
         first_group_indexes = list(range(0, 8, 2))
         second_group_indexes = list(range(1, 8, 2))
 
         first_group = []
         for index in first_group_indexes:
-            first_group.append(classified_players[index])
+            first_group.append(last_classification_group[index])
         second_group = []
         for index in second_group_indexes:
-            second_group.append(classified_players[index])
+            second_group.append(last_classification_group[index])
 
         pairs = []
-        next_player_iterator = 1
         for player_index in range(len(first_group)):
             first_to_append = first_group[player_index]
             second_to_append = second_group[player_index]
-            
-            # while self.played_against_before(first_to_append, second_to_append) == True:
-            #     print("! boucle ! next_player_iterator est égal à {}".format(next_player_iterator))
-            #     print("! boucle ! player_index est égal à {}".format(player_index))
-            #     print("! boucle ! len(second_group) est égal à {}".format(len(second_group)))
-
-            #     if next_player_iterator == (len(second_group) - 1):
-            #         second_to_append = second_group[player_index]
-            #         break
-            #     next_best_player = second_group[player_index + next_player_iterator]
-            #     second_to_append = next_best_player
-            #     next_player_iterator += 1  
-            #     print("next_player_iterator est égal à {} après l'itérateur".format(next_player_iterator))
-            #     print("l'itérateur devrait fonctionner !!!!")
             pairs.append([first_to_append, second_to_append])
+
         self.Pairs.append(pairs)
         return pairs
 
 
     def transform_pairs_instances_in_pairs_names(self):
         """Pairs in a tournament are instances of players, this function allows
-        us to replace these instances by the players' first and last name.
+        us to replace (in the pairs) these instances by the players' first and last name.
         """
         transformed_pairs = []
         for pairs_of_a_round in self.Pairs:

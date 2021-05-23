@@ -45,7 +45,7 @@ def take_option(option=False):
 5:"Quit", 42:"admin"}
         if new_option not in ["1","2","3","4","5", "42"]:
             print("Veuillez uniquement entrer une des options proposées")
-            take_option()
+            take_option(option)
         else :
             new_option = int(new_option)
             path = menu_dict[new_option]
@@ -59,7 +59,7 @@ def take_option(option=False):
         new_option = input()
         if new_option not in ["1","2","3","4","5","6"]:
             print("Veuillez uniquement entrer une des options proposées")
-            take_option()
+            take_option(option)
         else:
             new_option = int(new_option)
             path = tournament_menu_dict[new_option]
@@ -72,7 +72,7 @@ def take_option(option=False):
         new_option = input()
         if new_option not in ["1","2","3"]:
             print("Veuillez uniquement entrer une des options proposées")
-            take_option()
+            take_option(option)
         else:
             new_option = int(new_option)
             path = create_tournament_dict[new_option]
@@ -85,7 +85,7 @@ def take_option(option=False):
         new_option = input()
         if new_option not in ["1","2","3","4"]:
             print("Veuillez uniquement entrer une des options proposées")
-            take_option()
+            take_option(option)
         else:
             new_option = int(new_option)
             path = tournaments_status_dict[new_option]
@@ -95,11 +95,11 @@ def take_option(option=False):
         chosen_tournament = option[1]
         sh_to.show_tournament_status()
         chosen_tournament_status_dict = {1:"Show_rounds", 2:"Show_tournament_matches", \
-3:"Show_tournament_list"}
+3:"Modify_tournament_info", 4:"Show_tournament_list"}
         new_option = input()
-        if new_option not in ["1","2","3"]:
+        if new_option not in ["1","2","3","4"]:
             print("Veuillez uniquement entrer une des options proposées")
-            take_option()
+            take_option(option)
         else:
             new_option = int(new_option)
             path = chosen_tournament_status_dict[new_option]
@@ -113,7 +113,7 @@ def take_option(option=False):
         new_option = input()
         if new_option not in ["1","2","3","4","5","6"]:
             print("Veuillez uniquement entrer une des options proposées")
-            take_option()
+            take_option(option)
         else:
             new_option = int(new_option)
             path = player_menu_dict[new_option]
@@ -125,7 +125,7 @@ def take_option(option=False):
         new_option = input()
         if new_option not in ["1","2","3"]:
             print("Veuillez uniquement entrer une des options proposées")
-            take_option()
+            take_option(option)
         else:
             new_option = int(new_option)
             path = ranks_menu_dict[new_option]
@@ -138,7 +138,7 @@ def take_option(option=False):
         new_option = input()
         if new_option not in ["1","2","3","4"]:
             print("Veuillez uniquement entrer une des options proposées")
-            take_option()
+            take_option(option)
         else:
             new_option = int(new_option)
             path = SaveAndLoad_menu_dict[new_option]
@@ -465,9 +465,13 @@ Tournament_list[2], Tournament_list[3], Tournament_list[4], Tournament_list[5])
             return "Tournament_menu"
 
         if response[1] == "Modify_tournament_info":
-            print("Cette fonctionnalité n'a pas encore été implémentée")
-            return "Tournament_menu"
-
+            tournament = response[2]
+            answer = sh_to.show_modify_round(tournament)
+            if answer[0] == "Tournament_status_choices":
+                return ["Tournament_status_choices", tournament]
+            else:
+                return self.take_response(["Tournament", "Matches_result", tournament])
+            
         if response[1] == "Show_tournament_list":
             for tournament in md.Tournament.TOURNAMENTS:
                 print("\nNom du tournoi: {} | Lieu: {} | Date: {} | Mode de temps : {}"\

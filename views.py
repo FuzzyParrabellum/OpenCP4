@@ -95,10 +95,34 @@ ajouter?\n".format(player_index))
             Time_Preference = input("'Bullet', 'Blitz' ou 'Coup rapide'?\n")
         Description = input("Comment décrire ce tournoi de manière brève?\n")
         print("Les informations de votre nouveau tournoi ont été enregistrées, elles \
-restent modifiables en choisissant l'option 'Modifier les informations de ce tournoi'\n")
+restent modifiables en choisissant l'option ")
+        print("'Modifier les informations de ce tournoi'après l'avoir sélectionné \
+dans la liste des tournois.\n")
         return [Tournament_Name, Tournament_Date, Tournament_Location, \
 player_dictionnary, Time_Preference, Description]
 
+    @classmethod
+    def show_REcreate_tournament(cls):
+        tournament_date = input("Quelle est la date de ce nouveau tournoi? \
+JJ/MM/AAAA\n")
+        found_date = re.compile(r"\d\d/\d\d/\d\d\d\d").search(tournament_date)
+        while not found_date:
+            print("Veuillez entrer une date au bon format svp")
+            tournament_date = input("Quelle est la date de ce nouveau tournoi? \
+JJ/MM/AAAA\n")
+            found_date = re.compile(r"\d\d/\d\d/\d\d\d\d").search(tournament_date)
+        # Si un tournoi porte déjà la même nom à la même date, message d'erreur
+        tournament_location = input("Où se déroule ce nouveau tournoi?\n")
+        time_preference = input("'Bullet', 'Blitz' ou 'Coup rapide'?\n")
+        while time_preference not in ['Bullet', 'Blitz', 'Coup rapide']:
+            print("Veuillez entrer un mode de temps au bon format svp")
+            time_preference = input("'Bullet', 'Blitz' ou 'Coup rapide'?\n")
+        description = input("Comment décrire ce tournoi de manière brève?\n")
+        print("Les informations de votre nouveau tournoi ont été enregistrées, elles \
+restent modifiables en choisissant l'option ")
+        print("'Modifier les informations de ce tournoi'après l'avoir sélectionné \
+dans la liste des tournois.\n")
+        return [tournament_date, tournament_location, time_preference, description]
 
     @classmethod
     def show_create_matches(cls, Tournament_name):
@@ -200,6 +224,49 @@ player.score_in_tournament))
             player.score_in_tournament = 0
 
     @classmethod
+    def show_modify_round(cls, tournament_name):
+        for tournament in model.Tournament.TOURNAMENTS:
+            if tournament.name == tournament_name:
+                our_tournament = tournament
+                break
+        answer1 = input("Souhaitez-vous modifier les informations générales de ce tournoi? O/N\n")
+        if answer1 not in ["O", "N"]:
+            while answer1 not in ["O", "N"]:
+                print("Veuillez entrer une réponse au bon format svp\n")
+                answer1 = input("Souhaitez-vous modifier les informations générales de ce tournoi? O/N\n")
+        else:
+            if answer1 == "O":
+                tournament_values_to_change = cls.show_REcreate_tournament()
+                our_tournament.date = tournament_values_to_change[0]
+                our_tournament.location = tournament_values_to_change[1]
+                our_tournament.time_mode = tournament_values_to_change[2]
+                our_tournament.description = tournament_values_to_change[3]
+                print("\nLes informations ont bien été changées.\n")
+                return ["Tournament_status_choices", our_tournament]
+            else:
+                pass
+        print("Souhaitez-vous compléter le résultat des matches de ce tournoi ? O/N")
+        answer2 = input()
+        if answer2 not in ["O", "N"]:
+            while answer2 not in ["O", "N"]:
+                print("Veuillez entrer une réponse au bon format svp\n")
+                answer2 = input("Souhaitez-vous compléter le résultat des matches de ce tournoi ? O/N\n")
+        else:
+            if answer2 == "O": 
+                for round in our_tournament.Rounds:
+                    if round.matches_results == []:
+                        first_empty_round = [True]
+                        break
+                    if round == our_tournament.Rounds[-1]:
+                        print("Les résultats de tous les matches ont déjà été rentrés !\n")
+                        return ["Tournament_status_choices", our_tournament]
+                return first_empty_round
+            elif answer2 == "N":
+                return ["Tournament_status_choices", our_tournament]
+
+    
+
+    @classmethod
     def show_tournaments_status_options(cls):
         print("\nQuelle action souhaitez-vous effectuer ensuite?")
         print("Option '1' = Sélectionner un tournoi en particulier")
@@ -212,7 +279,9 @@ player.score_in_tournament))
     def show_tournament_status(cls):
         print("\nOption '1' = Liste de tous les tours du tournoi")
         print("Option '2' = Liste de tous les matches du tournoi")
-        print("Option '3' = Retourner à l'affichage des tournois")
+        print("Option '3' = Modifier des informations de ce tournoi et/ou")
+        print("terminer des remplir ces informations")
+        print("Option '4' = Retourner à l'affichage des tournois")
         print("\nEntrez votre commande ci-dessous...")
 
 

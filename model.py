@@ -77,9 +77,9 @@ class Tournament:
 
 
     def classify_by_rank(self, dictionnary_of_players):
-        """classify_by_rank permet de prendre un dictionnaire de joueurs
+        """classify_by_rank permet de prendre un dictionnaire d'instances de joueurs
         et de retourner une liste classée selon le classement de ces joueurs.
-        avec le joueur ayant le plus haut classement en 1er.
+        Avec le joueur ayant le plus haut classement en 1er.
         """
         players_list = []
         for player in dictionnary_of_players.values():

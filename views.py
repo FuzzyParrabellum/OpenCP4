@@ -13,9 +13,13 @@ class ShowMenu:
     def show_menu(cls):
         print("\n\n ")
         print(r"###############MENU###############")
-        print("\nBienvenue sur la page de menu, quelle action souhaitez-vous \
-effectuer?")
-        print("Pour effectuer une action, tapez son numéro dans la console et appuyez \
+        print("Bienvenue sur la page de menu de ce programme de gestion de tournois d'échecs. ")
+        print("En tapant une commande avec votre clavier et en tapant Enter ensuite, vous pourrez")
+        print("naviguer entre les différents menus du programme. Vous pourrez ajouter des joueurs, des tournois,")
+        print("et le résultat de ces joueurs pendant ces tournois à une base de donnée en allant dans le menu")
+        print("Sauvegarder / Charger les Données et charger ces données dans le même menu pour votre prochaine")
+        print("utilisation.")
+        print("\nPour effectuer une action, tapez son numéro dans la console et appuyez \
 sur ENTRÉE.\n")
         print("Option '1' = Créer un tournoi / Afficher rapport tournoi")
         print("Option '2' = Créer un joueur / Afficher rapport joueur ")
@@ -281,7 +285,9 @@ player.score_in_tournament))
         print("Option '2' = Liste de tous les matches du tournoi")
         print("Option '3' = Modifier des informations de ce tournoi et/ou")
         print("terminer des remplir ces informations")
-        print("Option '4' = Retourner à l'affichage des tournois")
+        print("Option '4' = Montrer les joueurs composant le tournoi triés par ordre alphabétique")
+        print("Option '5' = Montrer les joueurs composant le tournoi triés par leur classement")
+        print("Option '6' = Retourner à l'affichage des tournois")
         print("\nEntrez votre commande ci-dessous...")
 
 
@@ -334,7 +340,9 @@ restent modifiables en choisissant l'option 'Modifier les informations du joueur
         print("\nQue désirez-vous faire ensuite?")
         print("Option '1' : Voir les informations d'un joueur en particulier")
         print("Option '2' : Mettre à jour le classement d'un joueur")
-        print("Option '3' : Revenir au menu")
+        print("Option '3' : Afficher les joueurs selon leur nom de famille")
+        print("Option '4' : Afficher les joueurs selon leur classement")
+        print("Option '5' : Revenir au menu")
 
 
 

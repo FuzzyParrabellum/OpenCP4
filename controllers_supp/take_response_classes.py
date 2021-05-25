@@ -13,8 +13,6 @@ import views
 sys.path.append('env/Lib/site-packages')
 
 
-
-
 class FromMenu:
     """Une fois que le programme a été lancé une 1ère fois et
     que l'utilisateur a navigué vers une 1ère page, ce menu FromMenu
@@ -531,7 +529,6 @@ class SaveAndLoad:
                                         new_list = [player, player_score]
                                         real_match_result.append(new_list)
                         real_matches_results.append(real_match_result)
-
 
                     for tournament in model.Tournament.TOURNAMENTS:
                         if tournament.name == tournament_name_of_round:

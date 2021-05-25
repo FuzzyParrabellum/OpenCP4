@@ -13,12 +13,13 @@ class ShowMenu:
     def show_menu(cls):
         print("\n\n ")
         print(r"###############MENU###############")
-        print("Bienvenue sur la page de menu de ce programme de gestion de tournois d'échecs. ")
+        print("\nBienvenue sur la page de menu de ce programme de gestion de tournois d'échecs. ")
         print("En tapant une commande avec votre clavier et en tapant Enter ensuite, vous pourrez")
         print("naviguer entre les différents menus du programme. Vous pourrez ajouter des joueurs, des tournois,")
         print("et le résultat de ces joueurs pendant ces tournois à une base de donnée en allant dans le menu")
         print("Sauvegarder / Charger les Données et charger ces données dans le même menu pour votre prochaine")
         print("utilisation.")
+        print("ATTENTION : Si vous quittez sans sauvegarder, les données entrées ne seront pas enregistrées")
         print("\nPour effectuer une action, tapez son numéro dans la console et appuyez \
 sur ENTRÉE.\n")
         print("Option '1' = Créer un tournoi / Afficher rapport tournoi")
@@ -79,13 +80,16 @@ ajouter?\n".format(player_index))
                 for player in model.Player.PLAYERS:
                     if player_first_name == player.first_name and \
 player_last_name == player.last_name:
-                        print("\nCe joueur a bien été rajouté à la liste\n")
-                        player_dictionnary[player_index] = [player_first_name, player_last_name]
-                        player_found = True
+                        if [player_first_name, player_last_name] in player_dictionnary.values():
+                            print("\nCe joueur a déjà été ajouté au tournoi\n")
+                        else:
+                            print("\nCe joueur a bien été rajouté à la liste\n")
+                            player_dictionnary[player_index] = [player_first_name, player_last_name]
+                            player_found = True
                 if player_found == True:
                     pass
                 else:
-                    print("Il n'existe pas encore de joueur portant ce nom\n")
+                    print("Ajouter ce joueur n'est pas possible.\n")
                     response = input("Souhaitez-vous retourner au menu ? O/N\n")
                     if response == "O":
                         return "Tournament_menu"

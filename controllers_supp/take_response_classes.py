@@ -191,11 +191,17 @@ Tournament_list[2], Tournament_list[3], Tournament_list[4], Tournament_list[5])
 
         if response[1] == "Modify_tournament_info":
             tournament = response[2]
-            answer = views.ShowTournament.show_modify_round(tournament)
+            if type(tournament) is str:
+                print("YESYESYES")
+                for tournament_instance in model.Tournament.TOURNAMENTS:
+                    if tournament_instance.name == tournament:
+                        tournament = tournament_instance
+                        break
+            answer = views.ShowTournament.show_modify_round(tournament.name)
             if answer[0] == "Tournament_status_choices":
                 return ["Tournament_status_choices", tournament]
             else:
-                return self.take_response(["Tournament", "Matches_result", tournament])
+                return self.take_response(["Tournament", "Matches_result", tournament.name])
             
         if response[1] == "Show_tournament_list":
             for tournament in model.Tournament.TOURNAMENTS:
@@ -505,23 +511,28 @@ class SaveAndLoad:
                     tournament_name_of_round = list_of_round_values[4]
                     round_index = list_of_round_values[5]
 
-                    
-                    real_matches_results = []
-                    for match_result in simplified_matches_results:
-                        real_match_result = []
-                        for list_of_player_and_score in match_result:
-                            player_name = [list_of_player_and_score[0][0],\
-        list_of_player_and_score[0][1]]
-                            player_score = list_of_player_and_score[1]
-                            for player in model.Player.PLAYERS:
-                                if player_name[0] == player.first_name and \
-        player_name[1] == player.last_name:
-                                    new_list = [player, player_score]
-                                    real_match_result.append(new_list)
-                    real_matches_results.append(real_match_result)
+                    if simplified_matches_results == []:
+                        real_matches_results = []
+                        pass
+                    else:
+                        real_matches_results = []
+                        print("simplified_matches_results :{}".format(simplified_matches_results))
+                        for match_result in simplified_matches_results:
+                            real_match_result = []
+                            for list_of_player_and_score in match_result:
+                                player_name = [list_of_player_and_score[0][0],\
+            list_of_player_and_score[0][1]]
+                                player_score = list_of_player_and_score[1]
+                                for player in model.Player.PLAYERS:
+                                    if player_name[0] == player.first_name and \
+            player_name[1] == player.last_name:
+                                        new_list = [player, player_score]
+                                        real_match_result.append(new_list)
+                        real_matches_results.append(real_match_result)
                         
 
                     for tournament in model.Tournament.TOURNAMENTS:
+                        print("ON A BIEN CHARGE LE TOURNAMENT")
                         if tournament.name == tournament_name_of_round:
                             our_round = tournament.Rounds[round_index]
                             our_round.matches_results = real_matches_results

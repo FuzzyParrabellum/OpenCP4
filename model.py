@@ -151,6 +151,8 @@ player[1] == player_instance.last_name:
                     number_of_successive_equalities += 1 
             list_of_equal_players = list_of_players[player_index : (player_index + 1)\
 + number_of_successive_equalities]
+            for player in list_of_equal_players:
+                print(player.full_name)
             dictionnary_of_equal_players = {}
             for player_index in range(len(list_of_equal_players)):
                 dictionnary_of_equal_players[player_index] = [list_of_equal_players[player_index].first_name, \
@@ -159,7 +161,7 @@ list_of_equal_players[player_index].last_name]
             new_list = new_list + classified_equality_list
         else:
             dictionnary_of_equal_players = {}
-            for player_ind in range(0,2):
+            for player_ind in [player_index, player_index + 1]:
                 dictionnary_of_equal_players[player_ind] = [list_of_players[player_ind].first_name, \
 list_of_players[player_ind].last_name]   
             classified_equality_list = self.classify_by_rank(dictionnary_of_equal_players)
@@ -214,7 +216,6 @@ list_of_players[player_ind].last_name]
         for pair in self.Pairs[0]:
             for player_instance in pair:
                 our_players.append(player_instance)
-
         classified_players = []
         for player in our_players:
             if classified_players == []:
@@ -235,7 +236,6 @@ list_of_players[player_ind].last_name]
             print("le score du joueur {} est de {} pour l'instant".format(player.full_name, player.score_in_tournament))
         print("\n")
 
-  
         last_classification_group = []
         list_of_players_indexes = range(len(classified_players))
         for player_index in list_of_players_indexes:
@@ -247,15 +247,24 @@ list_of_players[player_ind].last_name]
                     last_classification_group.append(current_player)
                 else:
                     next_player_index = player_index + 1
-                    next_next_player_index = next_player_index + 1
+                    next_next_player_index = player_index + 2
                     next_player = classified_players[next_player_index]
                     next_next_player = classified_players[next_next_player_index]
-                    if self.played_against_before(current_player, next_player) == True:
-                        last_classification_group.append(current_player)
-                        last_classification_group.append(next_next_player)
-                    else:
-                        last_classification_group.append(current_player)
-                        last_classification_group.append(next_player)
+
+                    last_classification_group.append(current_player)
+                    if next_player in last_classification_group:
+                        if self.played_against_before(current_player, next_next_player) == True:
+                            if next_next_player == list_of_players_indexes[-1]:
+                                last_classification_group.append(next_next_player)
+                            else:
+                                last_classification_group.append(classified_players[next_next_player_index + 1])
+                        elif self.played_against_before(current_player, next_next_player) == False:
+                            last_classification_group.append(next_next_player)
+                    else :
+                        if self.played_against_before(current_player, next_player) == True:
+                            last_classification_group.append(next_next_player)
+                        elif self.played_against_before(current_player, next_player) == False:
+                            last_classification_group.append(next_player)
             
         first_group_indexes = list(range(0, 8, 2))
         second_group_indexes = list(range(1, 8, 2))
@@ -304,7 +313,7 @@ class Round:
         self.last_timestamp = "Cette tournée n°{} n'est pas encore terminée".format(self.name[-1])
 
     def begin_round(self):
-        """fonctionnalité à développer - indique l'heure de début d'un round
+        """ Indique l'heure de début d'un round
         """
         timestamp_to_format = datetime.datetime.now()
         self.first_timestamp = timestamp_to_format.strftime("%m-%d-%Y, %H:%M:%S")
@@ -321,12 +330,17 @@ class Round:
         player2.score_in_tournament += player2_result
 
     def end_round(self):
-        """fonctionnalité à développer - indique l'heure de fin d'un round
+        """ Indique l'heure de fin d'un round
         """
         timestamp_to_format = datetime.datetime.now()
         self.last_timestamp = timestamp_to_format.strftime("%m-%d-%Y, %H:%M:%S")
 
     def transform_instances_in_matches(self):
+        """Cette méthode remplace les instances de joueurs présentes dans les tuples
+        matches_result par leurs nom et prénom, afin de pouvoir facilement sérialiser
+        les tournois et les résultats de leurs matchs, pour ensuite les sauvegarder 
+        ou les charger avec tinyDB.
+        """
         simplified_matches_results = []
         for match_result in self.matches_results:
             simplified_match_result = []

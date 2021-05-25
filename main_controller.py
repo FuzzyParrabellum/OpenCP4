@@ -93,7 +93,7 @@ def take_option(option=False):
         chosen_tournament_status_dict = {1:"Show_rounds", 2:"Show_tournament_matches", \
 3:"Modify_tournament_info", 4:"Tournament_players_alphab", 5:"Tournament_players_ranked", 6:"Show_tournament_list"}
         new_option = input()
-        if new_option not in ["1","2","3","4", "5","6"]:
+        if new_option not in ["1","2","3","4","5","6"]:
             print("Veuillez uniquement entrer une des options proposées")
             take_option(option)
         else:
@@ -161,13 +161,13 @@ def go_to_path(response):
                 # Faudrait aussi que vérifie qu'a bien sauvegardé non?
                 show_exit()
                 sure = input()
-                if sure not in ["1", "2"]:
+                while sure not in ["1", "2"]:
                     print("Veuillez uniquement entrer une des options proposées")
                     go_to_path(response)
-                elif sure == "1":
+                if sure == "1":
                     quit()
                 elif sure == "2":
-                    return response[0]
+                    return "Menu"
             if response[0] == "Menu" :
                 return FromMenu.take_response(response)
             if response[0] == "Tournament":
@@ -186,20 +186,20 @@ def go_to_path(response):
 #########################################
 
 # LA BOUCLE NORMALE SANS AIDE AU DEBUGGAGE
-# def main():
-#     """La fonction main consiste essentiellement à afficher des choix à
-#     l'utilisateur, pour ensuite récupérer son input avec take_option(). 
-#     On utilisera ensuite son input pour naviguer dans les menus du
-#     programme avec go_to_path pour ensuite lui proposer à nouveau d'autres
-#     choix. 
-#     Cette boucle s'arrêtera avec l'arrêt du programme si l'utilisateur
-#     l'indique dans ses choix où si le programme reçoit une commande inconnue.
-#     """
-#     first_input = take_option()
-#     new_input = go_to_path(first_input)
-#     while True: 
-#         new_option = take_option(new_input)
-#         new_input = go_to_path(new_option)
+def main():
+    """La fonction main consiste essentiellement à afficher des choix à
+    l'utilisateur, pour ensuite récupérer son input avec take_option(). 
+    On utilisera ensuite son input pour naviguer dans les menus du
+    programme avec go_to_path pour ensuite lui proposer à nouveau d'autres
+    choix. 
+    Cette boucle s'arrêtera avec l'arrêt du programme si l'utilisateur
+    l'indique dans ses choix où si le programme reçoit une commande inconnue.
+    """
+    first_input = take_option()
+    new_input = go_to_path(first_input)
+    while True: 
+        new_option = take_option(new_input)
+        new_input = go_to_path(new_option)
         
 
 
@@ -218,28 +218,49 @@ def go_to_path(response):
 
 # UNE BOUCLE ALTERNATIVE CHARGEANT 8 JOUEURS ET AMENANT DIRECTEMENT 
 # À LA CRÉA DES MATCHES D'UN TOURNOI
-def main():
+# def main():
     
-    player1 = md.Player("John", "Doe", "12/01/1930", "M")
-    player2 = md.Player("Jane", "Doe", "17/04/1926", "F")
-    player3 = md.Player("Jojo", "Rabbit", "19/04/1928", "M")
-    player4 = md.Player("Joselaine", "Dabit", "20/04/1922", "F")
-    player5 = md.Player("Polo", "LePolo", "11/06/1815", "M")
-    player6 = md.Player("Carabine", "LeCarabin", "16/05/1982", "M")
-    player7 = md.Player("Canelle", "Doublekick", "12/11/1956", "F")
-    player8 = md.Player("Gaelle", "Belle", "12/11/1965", "M")
+#     player1 = md.Player("John", "Doe", "12/01/1930", "M")
+#     player2 = md.Player("Jane", "Doe", "17/04/1926", "F")
+#     player3 = md.Player("Jojo", "Rabbit", "19/04/1928", "M")
+#     player4 = md.Player("Joselaine", "Dabit", "20/04/1922", "F")
+#     player5 = md.Player("Polo", "LePolo", "11/06/1815", "M")
+#     player6 = md.Player("Carabine", "LeCarabin", "16/05/1982", "M")
+#     player7 = md.Player("Canelle", "Doublekick", "12/11/1956", "F")
+#     player8 = md.Player("Gaelle", "Belle", "12/11/1965", "M")
 
-    ex_tournament = md.Tournament("Other_exemple", "10/11/1990", "Las Parano", \
-{1:["John", "Doe"], 2:["Jane", "Doe"], 3:["Jojo", "Rabbit"], 4:["Joselaine", "Dabit"], 5:["Polo", "LePolo"], \
-6:["Carabine", "LeCarabin"], 7:["Canelle", "Doublekick"], 8:["Gaelle", "Belle"]}, "Bullet", "no_description")
+#     ex_tournament = md.Tournament("Other_exemple", "10/11/1990", "Las Parano", \
+# {1:["John", "Doe"], 2:["Jane", "Doe"], 3:["Jojo", "Rabbit"], 4:["Joselaine", "Dabit"], 5:["Polo", "LePolo"], \
+# 6:["Carabine", "LeCarabin"], 7:["Canelle", "Doublekick"], 8:["Gaelle", "Belle"]}, "Bullet", "no_description")
 
-    new_option = take_option(["Create_matches", ex_tournament.name])
-    new_input = go_to_path(new_option)
-    while True: 
-        new_option = take_option(new_input)
-        if new_option[1] == "admin":
-            break
-        new_input = go_to_path(new_option)
+#     new_option = take_option(["Create_matches", ex_tournament.name])
+#     new_input = go_to_path(new_option)
+#     while True: 
+#         new_option = take_option(new_input)
+#         if new_option[1] == "admin":
+#             break
+#         new_input = go_to_path(new_option)
+
+# def main():
+    
+#     player1 = md.Player("John", "Doe", "12/01/1930", "M")
+#     player2 = md.Player("Jane", "Doe", "17/04/1926", "F")
+#     player3 = md.Player("Jojo", "Rabbit", "19/04/1928", "M")
+#     player4 = md.Player("Joselaine", "Dabit", "20/04/1922", "F")
+#     player5 = md.Player("Polo", "LePolo", "11/06/1815", "M")
+#     player6 = md.Player("Carabine", "LeCarabin", "16/05/1982", "M")
+#     player7 = md.Player("Canelle", "Doublekick", "12/11/1956", "F")
+#     player8 = md.Player("Gaelle", "Belle", "12/11/1965", "M")
+#     player9 = md.Player("Frederic", "Entic", "11/05/1980", "M")
+#     player10 = md.Player("Courge", "Jambonne", "05/10/1927", "F")
+
+#     new_option = take_option()
+#     new_input = go_to_path(new_option)
+#     while True: 
+#         new_option = take_option(new_input)
+#         if new_option[1] == "admin":
+#             break
+#         new_input = go_to_path(new_option)
         
         
     

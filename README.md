@@ -1,6 +1,6 @@
 # OpenCP4
 
-Le fichier Model.py correspond aux classes Player, Tournament, Match, Round
+Le fichier Model.py correspond aux classes Player, Tournament, Round
 
 Le fichier Views.py correspond aux vues et différents messages de menus s'affichant dans le programme
 
@@ -15,5 +15,17 @@ quelle vue l'utilisateur a décidé d'aller.
 Ces deux fonctions sont mises dans une boucle while qui fait en sorte que l'une appelle l'autre à l'infini jusqu'à 
 ce que l'utilisateur choisisse une option lui permettant de quitter le programme.
 
+Il existe également un dossier annexe appelé controller_supp qui permet de continuer l'action du fichier Controller.py
+sans le surcharger en lignes de code. C'est dans ce dossier qu'est utilisé TinyDB pour sauvegarder et charger 
+les données rentrées dans le programme.
 -------------------
-Pour l'instant Data.json et requirements.txt sont vides
+.flake8 sert indiquer à flake8 d'ignorer l'environnement virtuel
+Data.json permet de sauvegarder et de charger des données à partir ou vers ce fichier
+requirements.txt contient les librairies à installer avec pip pour faire fonctionner le programme
+
+Pour utiliser flake8 afin d'afficher un rapport des anomalies présentes dans le programme, faire
+python3 flake8 une fois dans le dossier contenant le programme.
+
+IMPORTANT : Le rapport flake8 fourni par flake8 comporte actuellement des erreurs générées par flake8,
+il ne reconnait pas certains modules importés dans le programme.
+

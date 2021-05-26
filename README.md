@@ -28,7 +28,9 @@ sans le surcharger en lignes de code. C'est dans ce dossier qu'est utilisé Tiny
 les données rentrées dans le programme.
 
 .flake8 sert indiquer à flake8 d'ignorer l'environnement virtuel
+
 Data.json permet de sauvegarder et de charger des données à partir ou vers ce fichier
+
 requirements.txt contient les librairies à installer avec pip pour faire fonctionner le programme
 
 ---
@@ -36,7 +38,9 @@ Instructions pour faire fonctionner le programme
 ---
 
  • Tout d'abord, téléchargez ces différents fichiers dans un dossier que vous choisirez. Créez ensuite dans ce dossier un environnement virtuel nommé : env
+ 
 Par ex avec la commande : python -m venv env
+
 Afin que flake8 puisse correctement ignorer ces fichiers lors de son initialisation.
 
  • La version de python utilisée pour faire fonctionner ce programme est la 3.8.0.
@@ -49,4 +53,5 @@ où /path/to/requirements.txt est le chemin d'accès vers le fichier requirement
 python3 main_controller.py
 
  • Pour générer un rapport flake8 (la librairies flake8 est inclus dans requirements.txt) avec le nombre de lignes fixé à 119, faites ensuite:
+ 
 flake8 --max-line-length 119

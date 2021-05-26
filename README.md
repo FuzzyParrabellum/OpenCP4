@@ -34,14 +34,19 @@ requirements.txt contient les librairies à installer avec pip pour faire foncti
 ---
 Instructions pour faire fonctionner le programme
 ---
-• Tout d'abord, téléchargez ces différents fichiers dans un dossier que vous choisirez. Créez ensuite dans ce dossier un environnement virtuel nommé : env
+
+ • Tout d'abord, téléchargez ces différents fichiers dans un dossier que vous choisirez. Créez ensuite dans ce dossier un environnement virtuel nommé : env
 Par ex avec la commande : python -m venv env
 Afin que flake8 puisse correctement ignorer ces fichiers lors de son initialisation.
-• La version de python utilisée pour faire fonctionner ce programme est la 3.8.0.
-• Utiliser la commande dans un éditeur de commande :
+
+ • La version de python utilisée pour faire fonctionner ce programme est la 3.8.0.
+ 
+ • Utilisez la commande dans un éditeur de commande :
 pip install -r /path/to/requirements.txt
 où /path/to/requirements.txt est le chemin d'accès vers le fichier requirements.txt fourni dans ce repository
-• Exécutez ensuite le programme en tapant :
+
+ • Exécutez ensuite le programme en tapant :
 python3 main_controller.py
-• Pour générer un rapport flake8 (la librairies flake8 est inclus dans requirements.txt) avec le nombre de lignes fixé à 119, faites ensuite:
+
+ • Pour générer un rapport flake8 (la librairies flake8 est inclus dans requirements.txt) avec le nombre de lignes fixé à 119, faites ensuite:
 flake8 --max-line-length 119

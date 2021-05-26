@@ -1,15 +1,13 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-import model as md
-
 from views import ShowMenu as sh_me
 from views import ShowPlayer as sh_pl
 from views import ShowTournament as sh_to
 from views import ShowSaveAndLoad as sh_sa
 from views import show_exit
 
-from controllers_supp.take_response_classes import FromMenu, FromTournament, FromPlayer, FromSaveAndLoad, SaveAndLoad
+from controllers_supp.take_response_classes import FromMenu, FromTournament, FromPlayer, FromSaveAndLoad
 
 
 def take_option(option=False):
@@ -201,6 +199,9 @@ def main():
 
 
 # UNE BOUCLE ALTERNATIVE CHARGEANT 10 JOUEURS
+
+# import model as md
+
 # def main():
 
 #     player1 = md.Player("John", "Doe", "12/01/1930", "M")

@@ -54,4 +54,4 @@ python3 main_controller.py
 
  • Pour générer un rapport flake8 (la librairies flake8 est inclus dans requirements.txt) avec le nombre de lignes fixé à 119, faites ensuite:
  
-flake8 --max-line-length 119
+flake8 --format=html --htmldir=flake-report

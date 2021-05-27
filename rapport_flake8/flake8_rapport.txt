@@ -1,4 +1,0 @@
-.\main_controller.py:4:1: F401 'model as md' imported but unused
-.\main_controller.py:12:1: F401 'controllers_supp.take_response_classes.SaveAndLoad' imported but unused
-.\controllers_supp\take_response_classes.py:18:1: E303 too many blank lines (4)
-.\controllers_supp\take_response_classes.py:536:21: E303 too many blank lines (2)
